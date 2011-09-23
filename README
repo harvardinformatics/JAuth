@@ -1,3 +1,7 @@
+
+Installation
+-------------
+
 To compile and run in bash
 
 . setpath
@@ -6,7 +10,14 @@ javac AuthenticatorGUI.java
 
 java AuthenticatorGUI
 
+Description
+------------
+JAuth is a reference desktop client for the google authenticator
+
+http://code.google.com/p/google-authenticator/
+
 Acknowledgements :
+----------------
 
 LCD Font from
 -------------
