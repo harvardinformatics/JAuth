@@ -8,6 +8,12 @@ JAuth is a reference desktop client for the google authenticator
 
 http://code.google.com/p/google-authenticator/
 
+Demo
+----
+
+http://minilims.bioteam.net/JAuth.demo.jnlp
+
+(Uses a dummy secret key - usually this would be in a .google_authenticator file on your local system)
 
 Installation
 ------------
