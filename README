@@ -1,7 +1,30 @@
-In bash
+To compile and run in bash
 
 . setpath
 
 javac AuthenticatorGUI.java
 
 java Authenticator
+
+Acknowledgements :
+
+LCD Font from
+-------------
+Digital-7:  1.00 Oct 03 13:24:00 2008
+TrueType font 33.2KB
+Created by Sizenko Alexander. © 2008 Style-7. All rights reserved.
+http://www.styleseven.com
+
+Layout code from jgoodies.com
+-----------------------------
+JGoodies Karsten Lentzsch
+Wilhelmshavener Str. 25
+24105 Kiel
+Germany
+
+LCD Background png from
+-----------------------
+
+http://www.e-lab.de/components/lcd_and_keyboard_en.html
+modified from:
+http://www.e-lab.de/diverse/LCD2x16.jpg
