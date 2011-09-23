@@ -103,11 +103,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseEntered(MouseEvent evt) { }
   public void mouseExited (MouseEvent evt) { }
   public void mouseClicked(MouseEvent evt) { }
-  public void mouseDragged(MouseEvent evt) {}
+  public void mouseDragged(MouseEvent evt) { }
   public void mousePressed(MouseEvent evt) { }
-  public void mouseMoved(MouseEvent evt) { }
-  
-  public void mouseReleased(MouseEvent evt) {
+  public void mouseMoved  (MouseEvent evt) { }
+  public void mouseReleased(MouseEvent evt) { 
 
     // Copies the code to the clipboard when the copy label is clicked
 
@@ -179,7 +178,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     jf.setDefaultCloseOperation(2);
     jf.pack();
     
-    jf.setLocation(dim.width  - jf.getSize().width -50,50);
+    jf.setLocation(dim.width  - jf.getSize().width -50,30);
 		                
     
     jf.setVisible(true);
