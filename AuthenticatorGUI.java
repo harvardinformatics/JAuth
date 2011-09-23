@@ -38,14 +38,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public AuthenticatorGUI(String secret) {
     try {
-      image = ImageIO.read(new File("lcd3.png"));
-
       final byte[] keybytes = Base32String.decode(secret);
 
       mac = Mac.getInstance("HMACSHA1");
       mac.init(new SecretKeySpec(keybytes,""));
 
       pcg = new PasscodeGenerator(mac);
+
+      image = ImageIO.read(new File("lcd3.png"));
+      
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -56,7 +57,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   private void componentInit() {
 
     FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref",  // Cols
-				       "10px,40px,1px,10px,10px");           // Rows
+				       "10px,40px,1px,10px,10px");       // Rows
     
     setLayout(layout);
     setBackground(Color.white);
@@ -96,7 +97,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public void paintComponent(Graphics g) {
     Image tmpimage = image.getScaledInstance(this.getSize().width,this.getSize().height, Image.SCALE_DEFAULT);   
-    g.drawImage(tmpimage, 0, 0, null); // see javadoc for more info on the parameters
+    g.drawImage(tmpimage, 0, 0, null);
     
   }
 
@@ -111,12 +112,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseReleased(MouseEvent evt) {
 
     if (evt.getSource() == copyLabel) {
-      System.out.println("Copy");
       String tmp = codeField.getText();
+
       tmp = tmp.substring(0,3) + tmp.substring(4);
+
       StringSelection ss = new StringSelection(tmp);
+
       System.out.println(codeField.getText());
       Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+
     }
 
   }
@@ -130,11 +134,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	String tmp      = pcg.generateTimeoutCode();
 
 	String newcode = tmp.substring(0,3) + " " + tmp.substring(3,6);
-	int    remain  = (int)(System.currentTimeMillis()%30000/2000 +1);
+	int    remain  = (int)(System.currentTimeMillis()%30000/2000);
 
 	if (!newcode.equals(prevcode)){ 
 	  codeField.setText(newcode);
-	  repaint();
 	  int i = 0;
 	  String s = "";
 	  while (i <= 15-remain) {

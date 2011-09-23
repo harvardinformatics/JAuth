@@ -1,0 +1,7 @@
+In bash
+
+. setpath
+
+javac AuthenticatorGUI.java
+
+java Authenticator
