@@ -72,7 +72,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       codeField.setFont(javaFont.deriveFont(28f));
       copyLabel.setFont(javaFont.deriveFont(16f));
-
+      progressLabel.setFont(javaFont.deriveFont(16f));
     } catch (Exception e) {
       e.printStackTrace();
     }
