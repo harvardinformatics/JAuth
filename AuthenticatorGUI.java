@@ -170,10 +170,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
   public static void main(String[] args) {
-    Dimension dim  = Toolkit.getDefaultToolkit().getScreenSize();
-    AuthenticatorGUI gui = new AuthenticatorGUI("POGWOG");
-    
-    AuthenticatorFrame    jf   = new AuthenticatorFrame();
+    Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
+    AuthenticatorGUI   gui  = new AuthenticatorGUI("POGWOG");
+    AuthenticatorFrame jf   = new AuthenticatorFrame();
+
     gui.addMouseMotionListener(jf);
     gui.addMouseListener(jf);
     jf.setUndecorated(true);
@@ -181,8 +181,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     jf.setDefaultCloseOperation(2);
     jf.pack();
     
-    jf.setLocation(dim.width  / 2 - jf.getSize().width / 2,
-		   dim.height / 2 - jf.getSize().height / 2);
+    jf.setLocation(dim.width  - jf.getSize().width -50,50);
+		                
     
     jf.setVisible(true);
   }
