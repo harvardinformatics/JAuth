@@ -170,13 +170,23 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
   public static void main(String[] args) {
+    String secret     = "";
+    String secretfile = "";
+
+    Image image = null;
+    Font font   = null;
+
     try {
       InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
-      Font        font        = Font.createFont( Font.TRUETYPE_FONT,fontStream ); 
       InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
-      Image       image       = ImageIO.read(imagestream);
 
-      String secretfile = ".google_authenticator";
+      font        = Font.createFont( Font.TRUETYPE_FONT,fontStream ); 
+      image       = ImageIO.read(imagestream);
+
+      secretfile = ".google_authenticator";
+      String homedir    = System.getProperty("user.home");
+
+      secretfile = homedir + File.separator + secretfile;
 
       if (args.length > 0) {
 	secretfile = args[0];
@@ -185,8 +195,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       byte[] buffer = new byte[(int) new File(secretfile).length()];
       BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
       f.read(buffer);
-      String secret = new String(buffer);
+      secret = new String(buffer);
       
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error reading secret string. This should exist in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
+      System.exit(0);
+    }
+    try {
       Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
       AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
@@ -204,7 +219,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       
       jf.setVisible(true);
     } catch (Exception e) {
-      e.printStackTrace();
+      JOptionPane.showMessageDialog(null, "Error creating GUI","JAuth Error", JOptionPane.ERROR_MESSAGE);
+      System.exit(0);
     }
   }
   
