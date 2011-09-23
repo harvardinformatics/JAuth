@@ -22,12 +22,17 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public Image             image;
 
+  public InputStream       fontStream;
+
   public String            secret;
   public Mac               mac;
   public PasscodeGenerator pcg;
+  public Font              font;
 
-  public AuthenticatorGUI(String secret) {
+  public AuthenticatorGUI(String secret,Image image,Font font) {
     try {
+      this.font  = font;
+      this.image = image;
 
       // Do the magic with the secret key
       final byte[] keybytes = Base32String.decode(secret);
@@ -37,9 +42,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       pcg = new PasscodeGenerator(mac);
 
-      // Read the background image
-      image = ImageIO.read(new File("lcd3.png"));
-      
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -61,11 +63,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       // Load the LCD font
 
-      Font javaFont = Font.createFont( Font.TRUETYPE_FONT,new File("digital.ttf"));
+      Font font28 = new Font("Digital-7Mono",Font.PLAIN,28);
+      Font font16 = new Font("Digital-7Mono",Font.PLAIN,16);
+      Font font20 = new Font("Digital-7Mono",Font.PLAIN,20);
 
-      codeField.setFont(javaFont.deriveFont(28f));
-      copyLabel.setFont(javaFont.deriveFont(16f));
-      progressLabel.setFont(javaFont.deriveFont(20f));
+      codeField.setFont(font28);
+      copyLabel.setFont(font16);
+      progressLabel.setFont(font20);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -164,22 +168,42 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
   public static void main(String[] args) {
+    try {
+      InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
+      Font        font        = Font.createFont( Font.TRUETYPE_FONT,fontStream ); 
+      
+      InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
+      Image       image       = ImageIO.read(imagestream);
 
-    Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
-    AuthenticatorGUI   gui  = new AuthenticatorGUI("POGWOG");
-    AuthenticatorFrame jf   = new AuthenticatorFrame();
+      String secretfile = ".google_authenticator";
 
-    gui.addMouseMotionListener(jf);
-    gui.addMouseListener(jf);
-    jf.setUndecorated(true);
-    jf.add(gui);
-    jf.setDefaultCloseOperation(2);
-    jf.pack();
-    
-    jf.setLocation(dim.width  - jf.getSize().width -50,30);
-		                
-    
-    jf.setVisible(true);
+      if (args.length > 0) {
+	secretfile = args[0];
+      }
+
+      byte[] buffer = new byte[(int) new File(secretfile).length()];
+      BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
+      f.read(buffer);
+      String secret = new String(buffer);
+      
+      Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
+      AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
+      AuthenticatorFrame jf   = new AuthenticatorFrame();
+      
+      gui.addMouseMotionListener(jf);
+      gui.addMouseListener(jf);
+      jf.setUndecorated(true);
+      jf.add(gui);
+      jf.setDefaultCloseOperation(2);
+      jf.pack();
+      
+      jf.setLocation(dim.width  - jf.getSize().width -50,30);
+      
+      
+      jf.setVisible(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
   
 }

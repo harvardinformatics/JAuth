@@ -1,0 +1,7 @@
+
+jar xf forms-1.1.0.jar
+
+echo "Main-Class: AuthenticatorGUI" > manifest
+jar cmf manifest JAuth.jar *.class *.ttf *.png com
+
+
