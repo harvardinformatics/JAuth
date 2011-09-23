@@ -118,7 +118,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       StringSelection ss = new StringSelection(tmp);
 
-      System.out.println(codeField.getText());
       Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 
     }
@@ -188,11 +187,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 }
 
 class Counter extends Thread {
-  public Vector listeners = new Vector();
-  public int time = 0;
+  public ActionListener l;
+  public int    time = 0;
 
   public void addActionListener(ActionListener l) {
-    listeners.addElement(l);
+    this.l = l;
   }
   
   public void run() {
@@ -201,9 +200,7 @@ class Counter extends Thread {
 	Thread.sleep(2000);
 	time+= 2000;
 
-	for (int i = 0; i < this.listeners.size(); i++) {
-	  ((ActionListener)listeners.elementAt(i)).actionPerformed(new ActionEvent((Object)this,time,String.valueOf(time)));
-	}
+	l.actionPerformed(new ActionEvent((Object)this,time,String.valueOf(time)));
       } catch (InterruptedException e) {
 	e.printStackTrace();
       }
