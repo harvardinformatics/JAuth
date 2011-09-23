@@ -38,6 +38,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public AuthenticatorGUI(String secret) {
     try {
+
+      // Do the magic with the secret key
       final byte[] keybytes = Base32String.decode(secret);
 
       mac = Mac.getInstance("HMACSHA1");
@@ -45,6 +47,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       pcg = new PasscodeGenerator(mac);
 
+      // Read the background image
       image = ImageIO.read(new File("lcd3.png"));
       
     } catch (Exception e) {
@@ -89,7 +92,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     add(progressLabel,         cc.xywh(2,4,3,1)); // 2nd col 4th row spans 3 cols
 
 
-    // Start the counter thread
+    // Start the counter thread - fires an event every two seconds
     Counter cd = new Counter();
     cd.addActionListener(this);
     cd.start();
