@@ -1,5 +1,9 @@
+Authors : James Cuff and Michele Clamp
+---------------------------------------
+
 Description
 ------------
+
 JAuth is a reference desktop client for the google authenticator
 
 http://code.google.com/p/google-authenticator/
@@ -19,6 +23,12 @@ java AuthenticatorGUI
 
 Acknowledgements
 ----------------
+
+PasscodeGenerator and Base32String code from
+--------------------------------------------
+
+sweis@google.com
+
 
 LCD Font from
 -------------
