@@ -13,6 +13,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import javax.imageio.ImageIO;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+//import com.apple.eawt.*;
 
 public final class AuthenticatorGUI extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
@@ -31,7 +32,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public AuthenticatorGUI(String secret,Image image,Font font) {
     try {
-      System.err.println(secret);
       this.font  = font;
       this.image = image;
 
@@ -139,6 +139,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
 	if (!newcode.equals(prevcode)){ 
 	  codeField.setText(newcode);
+          //new Application().setDockIconBadge(tmp);
 	  int i = 0;
 	  String s = "";
 	  while (i <= 15-remain) {
@@ -192,6 +193,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       
       gui.addMouseMotionListener(jf);
       gui.addMouseListener(jf);
+      //new Application().setDockIconImage(image);
       jf.setUndecorated(true);
       jf.add(gui);
       jf.setDefaultCloseOperation(2);
