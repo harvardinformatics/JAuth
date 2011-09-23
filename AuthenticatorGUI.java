@@ -75,16 +75,14 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     copyLabel.setPreferredSize(new Dimension(60,30));
     copyLabel.addMouseListener(this);
 
-
     // Show textfield with number
     add(codeField,             cc.xy(2,2));       // 2nd col 2nd row
  
     // Show copy button
-    add(copyLabel,            cc.xy(4,2));        // 4th col 2nd row
+    add(copyLabel,             cc.xy(4,2));       // 4th col 2nd row
 
     // Show timer countdown
     add(progressLabel,         cc.xywh(2,4,3,1)); // 2nd col 4th row spans 3 cols
-
 
     // Start the counter thread - fires an event every two seconds
 
