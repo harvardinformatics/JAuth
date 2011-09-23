@@ -50,7 +50,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   private void componentInit() {
 
     FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref",  // Cols
-				       "10px,35px,0px,5px,12px");        // Rows
+				       "10px,35px,0px,5px,17px");        // Rows
     
     setLayout(layout);
     setBackground(Color.white);
