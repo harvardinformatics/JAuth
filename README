@@ -1,6 +1,5 @@
-
 Installation
--------------
+------------
 
 To compile and run in bash
 
@@ -16,7 +15,7 @@ JAuth is a reference desktop client for the google authenticator
 
 http://code.google.com/p/google-authenticator/
 
-Acknowledgements :
+Acknowledgements
 ----------------
 
 LCD Font from
