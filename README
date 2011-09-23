@@ -14,12 +14,17 @@ Installation
 
 To compile and run in bash
 
-. setpath
+./makejar
 
-javac AuthenticatorGUI.java
+then to run 
 
-java AuthenticatorGUI
+java -jar JAuth.jar
 
+or
+
+java -jar JAuth.jar <myauthfile>
+
+By default it looks in the current directory for a file called .google_authenticator
 
 Acknowledgements
 ----------------
