@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jnlp spec="1.0+" codebase="http://minilims.bioteam.net/" href="JAuth.jnlp">
+
+  <information>
+     <title>JAuth</title>
+     <vendor>Harvard/BioTeam</vendor>
+     <homepage href="index.html" />
+     <description>JAuth</description>
+     <offline-allowed />
+   </information>
+
+  <resources>
+     <j2se version="1.3+"/>
+     <jar href="JAuth.jar" main="true" />
+   </resources>
+
+  <application-desc main-class="AuthenticatorGUI">
+     <argument>-secret=SECRET</argument>
+  </application>
+
+  <security>
+     <all-permissions/>
+  </security>
+
+</jnlp>
+
+

@@ -127,7 +127,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
 
   public void actionPerformed(ActionEvent e){
-    
+      
     if (e.getSource() instanceof Counter) {
 
       try {
@@ -187,16 +187,19 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       String homedir    = System.getProperty("user.home");
 
       secretfile = homedir + File.separator + secretfile;
-
-      if (args.length > 0) {
+      System.out.println(args[0]);
+      if (args.length > 0  && args[0].indexOf("-secret=") == 0) {
+        secret = args[0].substring(8);
+      } else if (args.length > 0) {
 	secretfile = args[0];
       }
 
-      byte[] buffer = new byte[(int) new File(secretfile).length()];
-      BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
-      f.read(buffer);
-      secret = new String(buffer);
-      
+      if (secret.equals("")) {
+        byte[] buffer = new byte[(int) new File(secretfile).length()];
+        BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
+        f.read(buffer);
+        secret = new String(buffer);
+      } 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
       System.exit(0);
