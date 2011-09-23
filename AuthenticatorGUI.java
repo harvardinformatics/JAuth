@@ -31,6 +31,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public AuthenticatorGUI(String secret,Image image,Font font) {
     try {
+      System.err.println(secret);
       this.font  = font;
       this.image = image;
 
@@ -63,9 +64,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       // Load the LCD font
 
-      Font font28 = new Font("Digital-7Mono",Font.PLAIN,28);
-      Font font16 = new Font("Digital-7Mono",Font.PLAIN,16);
-      Font font20 = new Font("Digital-7Mono",Font.PLAIN,20);
+      Font font28 = this.font.deriveFont(28f);
+      Font font16 = this.font.deriveFont(16f);
+      Font font20 = this.font.deriveFont(20f);
 
       codeField.setFont(font28);
       copyLabel.setFont(font16);
@@ -171,7 +172,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     try {
       InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
       Font        font        = Font.createFont( Font.TRUETYPE_FONT,fontStream ); 
-      
       InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
       Image       image       = ImageIO.read(imagestream);
 

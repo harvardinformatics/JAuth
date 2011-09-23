@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#  keytool -genkey -alias JAuth -keyalg RSA -keystore keystore.jks -keysize 2049   # Generates the keystore - only run once
+
+jarsigner -keystore keystore.jks  JAuth.jar JAuth
+
