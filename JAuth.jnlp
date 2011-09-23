@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<jnlp spec="1.0+" codebase="http://localhost/" href="JAuth.jnlp">
+<jnlp spec="1.0+" codebase="http://minilims.bioteam.net/" href="JAuth.jnlp">
 
   <information>
-     <title>Minilims</title>
-     <vendor>BioTeam</vendor>
+     <title>JAuth</title>
+     <vendor>Harvard/BioTeam</vendor>
      <homepage href="index.html" />
      <description>JAuth</description>
      <offline-allowed />
