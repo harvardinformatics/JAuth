@@ -3,37 +3,27 @@ import java.io.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.*;
 
-import java.util.regex.Pattern;
-import java.util.zip.*;
-import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.datatransfer.*;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import java.sql.*;
-
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 public final class AuthenticatorGUI extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
-  public int lastx;
-  public int lasty;
+  public JLabel            codeField     = new JLabel("--- ---");
+  public JLabel            copyLabel     = new JLabel(" Copy");
+  public JLabel            progressLabel = new JLabel("");
 
-  public JLabel        codeField     = new JLabel("--- ---");
-  public JLabel        copyLabel     = new JLabel(" Copy");
-  public JLabel        progressLabel = new JLabel("");
-  public Image         image;
+  public Image             image;
 
-  public String        secret;
-  public Mac           mac;
+  public String            secret;
+  public Mac               mac;
   public PasscodeGenerator pcg;
 
   public AuthenticatorGUI(String secret) {
@@ -60,7 +50,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   private void componentInit() {
 
     FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref",  // Cols
-				       "10px,35px,0px,5px,12px");       // Rows
+				       "10px,35px,0px,5px,12px");        // Rows
     
     setLayout(layout);
     setBackground(Color.white);
@@ -68,11 +58,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     CellConstraints cc = new CellConstraints();
 
     try {
+
+      // Load the LCD font
+
       Font javaFont = Font.createFont( Font.TRUETYPE_FONT,new File("digital.ttf"));
 
       codeField.setFont(javaFont.deriveFont(28f));
       copyLabel.setFont(javaFont.deriveFont(16f));
       progressLabel.setFont(javaFont.deriveFont(20f));
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -83,16 +77,17 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
 
     // Show textfield with number
-    add(codeField,             cc.xy(2,2));    // 2nd col 2nd row
+    add(codeField,             cc.xy(2,2));       // 2nd col 2nd row
  
     // Show copy button
-    add(copyLabel,            cc.xy(4,2));     // 4th col 2nd row
+    add(copyLabel,            cc.xy(4,2));        // 4th col 2nd row
 
     // Show timer countdown
     add(progressLabel,         cc.xywh(2,4,3,1)); // 2nd col 4th row spans 3 cols
 
 
     // Start the counter thread - fires an event every two seconds
+
     Counter cd = new Counter();
     cd.addActionListener(this);
     cd.start();
@@ -113,6 +108,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseMoved(MouseEvent evt) { }
   
   public void mouseReleased(MouseEvent evt) {
+
+    // Copies the code to the clipboard when the copy label is clicked
 
     if (evt.getSource() == copyLabel) {
       String tmp = codeField.getText();
@@ -170,6 +167,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
   public static void main(String[] args) {
+
     Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
     AuthenticatorGUI   gui  = new AuthenticatorGUI("POGWOG");
     AuthenticatorFrame jf   = new AuthenticatorFrame();
