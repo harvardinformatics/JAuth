@@ -198,7 +198,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       secret = new String(buffer);
       
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error reading secret string. This should exist in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
       System.exit(0);
     }
     try {
@@ -209,6 +209,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       gui.addMouseMotionListener(jf);
       gui.addMouseListener(jf);
       //new Application().setDockIconImage(image);
+
+      jf.setIconImage(image);
       jf.setUndecorated(true);
       jf.add(gui);
       jf.setDefaultCloseOperation(2);
