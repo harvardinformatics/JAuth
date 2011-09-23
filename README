@@ -4,7 +4,7 @@ To compile and run in bash
 
 javac AuthenticatorGUI.java
 
-java Authenticator
+java AuthenticatorGUI
 
 Acknowledgements :
 
