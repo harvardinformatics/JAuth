@@ -187,7 +187,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       String homedir    = System.getProperty("user.home");
 
       secretfile = homedir + File.separator + secretfile;
-      System.out.println(args[0]);
       if (args.length > 0  && args[0].indexOf("-secret=") == 0) {
         secret = args[0].substring(8);
       } else if (args.length > 0) {

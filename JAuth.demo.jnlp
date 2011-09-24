@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<jnlp spec="1.0+" codebase="http://minilims.bioteam.net/" href="JAuth.jnlp">
+<jnlp spec="1.0+" codebase="http://minilims.bioteam.net/" href="JAuth.demo.jnlp">
 
   <information>
      <title>JAuth</title>
