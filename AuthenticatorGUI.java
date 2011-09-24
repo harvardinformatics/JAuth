@@ -20,6 +20,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public JLabel            codeField     = new JLabel("--- ---");
   public JLabel            copyLabel     = new JLabel(" Copy");
   public JLabel            progressLabel = new JLabel("");
+  public JLabel            closeLabel    = new JLabel("x");
 
   public Image             image;
 
@@ -52,7 +53,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   private void componentInit() {
 
-    FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref",  // Cols
+    FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref,10",  // Cols
 				       "10px,35px,0px,5px,17px");        // Rows
     
     setLayout(layout);
@@ -67,10 +68,17 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       Font font28 = this.font.deriveFont(28f);
       Font font16 = this.font.deriveFont(16f);
       Font font20 = this.font.deriveFont(20f);
+      Font font12 = new Font("Monospace",Font.BOLD,10);
 
       codeField.setFont(font28);
       copyLabel.setFont(font16);
       progressLabel.setFont(font20);
+      closeLabel.setFont(font12);
+
+      Color c = new Color(150,150,150);
+      closeLabel.setForeground(c);
+      //closeLabel.setBorder(BorderFactory.createLineBorder(Color.red));
+
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -80,6 +88,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     copyLabel.setPreferredSize(new Dimension(60,30));
     copyLabel.addMouseListener(this);
 
+    closeLabel.setPreferredSize(new Dimension(10,10));
+    closeLabel.addMouseListener(this);
     // Show textfield with number
     add(codeField,             cc.xy(2,2));       // 2nd col 2nd row
  
@@ -88,6 +98,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
     // Show timer countdown
     add(progressLabel,         cc.xywh(2,4,3,1)); // 2nd col 4th row spans 3 cols
+
+    add(closeLabel,            cc.xy(5,1));       //
 
     // Start the counter thread - fires an event every two seconds
 
@@ -105,7 +117,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public void mouseEntered(MouseEvent evt) { }
   public void mouseExited (MouseEvent evt) { }
-  public void mouseClicked(MouseEvent evt) { }
+  public void mouseClicked(MouseEvent evt) {
+    if (evt.getSource() == closeLabel) {
+      System.exit(0);
+    }
+  }
   public void mouseDragged(MouseEvent evt) { }
   public void mousePressed(MouseEvent evt) { }
   public void mouseMoved  (MouseEvent evt) { }
@@ -201,6 +217,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       } 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
+      e.printStackTrace();
       System.exit(0);
     }
     try {
@@ -301,7 +318,8 @@ class AuthenticatorFrame extends JFrame implements MouseListener, MouseMotionLis
 
   public void mouseEntered(MouseEvent evt) { }
   public void mouseExited (MouseEvent evt) { }
-  public void mouseClicked(MouseEvent evt) { }
+  public void mouseClicked(MouseEvent evt) {
+  }
   public void mouseReleased(MouseEvent evt) { }
   public void mouseMoved(MouseEvent evt) { }
 

@@ -4,27 +4,52 @@ Authors : James Cuff and Michele Clamp 2011
 Description
 ------------
 
-JAuth is a reference desktop client for the google authenticator
+JAuth is a reference desktop client for the google authenticator. 
+Intended as an alternative to the iPhone Google Authenticator app and similar.
 
 http://code.google.com/p/google-authenticator/
 
+Demo
+----
+
+http://minilims.bioteam.net/JAuth.demo.jnlp
+
+(Uses a dummy secret key - usually this would be in a .google_authenticator file on your local system)
 
 Installation
 ------------
 
 To compile and run in bash
 
-./makejar
+  ./makejar
 
 then to run 
 
-java -jar JAuth.jar
+  java -jar JAuth.jar
 
 or
 
-java -jar JAuth.jar <myauthfile>
+  java -jar JAuth.jar <myauthfile>
 
-By default it looks in the current directory for a file called .google_authenticator
+By default it looks in the home directory for a file called .google_authenticator
+
+Alternatively :
+
+  java -jar JAuth.jar -secret=MY_SECRET_KEY
+
+Webstart
+--------
+
+Initialize your keystore (do this only once)
+
+  keytool -genkey -alias JAuth -keyalg RSA -keystore keystore.jks -keysize 2048
+
+Sign your jar
+
+  jarsigner -keystore keystore.jks  JAuth.jar JAuth
+
+Edit the JAuth.jnlp file to reflect your local webserver path.
+Copy the JAuth.jnlp and JAuth.jar files into the webserver path.
 
 Acknowledgements
 ----------------
