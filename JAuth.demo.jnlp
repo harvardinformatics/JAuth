@@ -17,7 +17,7 @@
 
   <application-desc main-class="AuthenticatorGUI">
      <argument>-secret=SECRET</argument>
-  </application>
+  </application-desc>
 
   <security>
      <all-permissions/>
