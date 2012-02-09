@@ -210,10 +210,27 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       }
 
       if (secret.equals("")) {
-        byte[] buffer = new byte[(int) new File(secretfile).length()];
-        BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
-        f.read(buffer);
-        secret = new String(buffer);
+        File file = new File(secretfile);
+
+        if (file.exists()) {
+          byte[] buffer = new byte[(int) file.length()];
+          BufferedInputStream f = new BufferedInputStream(new FileInputStream(file));
+          f.read(buffer);
+          secret = new String(buffer);
+        }
+        else {
+          secret = JOptionPane.showInputDialog("Enter your secret key:");
+          try {
+            BufferedWriter f = new BufferedWriter(new FileWriter(file));
+            f.write(secret);
+            f.newLine();
+            f.close();
+          } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing secret string to [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            System.exit(0);
+          }
+        }
       } 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
