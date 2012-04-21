@@ -1,4 +1,6 @@
-. setpath
+#!/bin/bash
+
+export CLASSPATH=forms-1.1.0.jar:.
 
 javac AuthenticatorGUI.java
 
