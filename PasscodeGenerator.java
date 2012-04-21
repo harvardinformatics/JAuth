@@ -85,6 +85,10 @@ public class PasscodeGenerator {
     return generateResponseCode(clock.getCurrentInterval());
   }
 
+  public String generateNextTimeoutCode() throws GeneralSecurityException {
+    return generateResponseCode(clock.getCurrentInterval()+1);
+  }
+
   /**
    * @param challenge A long-valued challenge
    * @return A decimal response code

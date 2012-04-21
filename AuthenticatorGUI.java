@@ -19,6 +19,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public JLabel            codeField     = new JLabel("--- ---");
   public JLabel            copyLabel     = new JLabel(" Copy");
+  public JLabel            nextLabel     = new JLabel(" next");
   public JLabel            progressLabel = new JLabel("");
   public JLabel            closeLabel    = new JLabel("x");
 
@@ -30,6 +31,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public Mac               mac;
   public PasscodeGenerator pcg;
   public Font              font;
+
+  public boolean           shownextcode = false;
+
+  public String            currcode;
+  public String            nextcode;
+
+  public Color             darkred = new Color(150,0,0);
 
   public AuthenticatorGUI(String secret,Image image,Font font) {
     try {
@@ -53,8 +61,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   private void componentInit() {
 
-    FormLayout layout = new FormLayout("20px,fill:pref:grow,4dlu,pref,10",  // Cols
-				       "10px,35px,0px,5px,17px");        // Rows
+    FormLayout layout = new FormLayout("17px,fill:pref:grow,1dlu,40px,10px",  // Cols
+				       "10px,2px,14px,14px,2px,5px,17px");      // Rows
     
     setLayout(layout);
     setBackground(Color.white);
@@ -65,13 +73,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       // Load the LCD font
 
-      Font font28 = this.font.deriveFont(28f);
+      Font font32 = this.font.deriveFont(32f);
       Font font16 = this.font.deriveFont(16f);
       Font font20 = this.font.deriveFont(20f);
+      Font font13 = this.font.deriveFont(13f);
       Font font12 = new Font("Monospace",Font.BOLD,10);
 
-      codeField.setFont(font28);
-      copyLabel.setFont(font16);
+      codeField.setFont(font32);
+      copyLabel.setFont(font13);
+      nextLabel.setFont(font13);
       progressLabel.setFont(font20);
       closeLabel.setFont(font12);
 
@@ -86,18 +96,22 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
     codeField.setPreferredSize(new Dimension(100,30));
     copyLabel.setPreferredSize(new Dimension(60,30));
+    nextLabel.setPreferredSize(new Dimension(60,30));
     copyLabel.addMouseListener(this);
+    nextLabel.addMouseListener(this);
 
     closeLabel.setPreferredSize(new Dimension(10,10));
     closeLabel.addMouseListener(this);
     // Show textfield with number
-    add(codeField,             cc.xy(2,2));       // 2nd col 2nd row
+    add(codeField,             cc.xywh(2,3,1,2));       // 2nd col 3rd row
  
     // Show copy button
-    add(copyLabel,             cc.xy(4,2));       // 4th col 2nd row
+    add(copyLabel,             cc.xy(4,3));       // 4th col 3rd row
+
+    add(nextLabel,             cc.xy(4,4));       // 4th col 4th row
 
     // Show timer countdown
-    add(progressLabel,         cc.xywh(2,4,3,1)); // 2nd col 4th row spans 3 cols
+    add(progressLabel,         cc.xywh(2,6,3,1)); // 2nd col 6th row spans 3 cols
 
     add(closeLabel,            cc.xy(5,1));       //
 
@@ -123,13 +137,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
   public void mouseDragged(MouseEvent evt) { }
-  public void mousePressed(MouseEvent evt) { }
-  public void mouseMoved  (MouseEvent evt) { }
-  public void mouseReleased(MouseEvent evt) { 
-
+  public void mousePressed(MouseEvent evt) { 
     // Copies the code to the clipboard when the copy label is clicked
 
     if (evt.getSource() == copyLabel) {
+
       String tmp = codeField.getText();
 
       tmp = tmp.substring(0,3) + tmp.substring(4);
@@ -138,24 +150,82 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 
+      copyLabel.setForeground(this.darkred);
+
+    } else if (evt.getSource() == nextLabel) {
+
+      this.shownextcode = !this.shownextcode;
+
+      if (this.shownextcode) {
+	nextLabel.setForeground(this.darkred);
+      } else {
+	nextLabel.setForeground(Color.black);
+      }
+      this.currcode = null;
+      
     }
 
+  }      
+  public void mouseMoved  (MouseEvent evt) { }
+  public void mouseReleased(MouseEvent evt) { 
+
+    try {
+
+      Thread.currentThread().sleep(1000);
+
+      copyLabel.setForeground(Color.black);
+
+    } catch (InterruptedException ie){
+      System.out.println("Thread interrupted");
+    }
   }
 
+  public String getNewCode() {
+    try {
+      if (this.shownextcode) {
+	return pcg.generateNextTimeoutCode();
+      } else {
+	return pcg.generateTimeoutCode();
+      }
+    } catch (java.security.GeneralSecurityException ex) {
+    }
+    return "";
+  }
+   
+  public String getCurrentCode() {
+    return this.currcode;
+  }
+    
   public void actionPerformed(ActionEvent e){
       
     if (e.getSource() instanceof Counter) {
 
       try {
-	String prevcode = codeField.getText();
-	String tmp      = pcg.generateTimeoutCode();
+	String currcode = this.getCurrentCode();
+	String newcode  = this.getNewCode();
+	String tmp      = newcode;
 
-	String newcode = tmp.substring(0,3) + " " + tmp.substring(3,6);
+	if (this.shownextcode) {
+
+	  codeField.setForeground(this.darkred);
+	  nextLabel.setForeground(this.darkred);
+	} else {
+
+	  codeField.setForeground(Color.black);
+	  nextLabel.setForeground(Color.black);
+
+	}
+
+
+	String newcodestr  = tmp.substring(0,3) + " " + tmp.substring(3,6);
+
 	int    remain  = (int)(System.currentTimeMillis()%30000/2000);
 
-	if (!newcode.equals(prevcode)){ 
-	  codeField.setText(newcode);
-          //new Application().setDockIconBadge(tmp);
+	if (currcode == null || !newcode.equals(currcode)){ 
+	    
+	  codeField.setText(newcodestr);
+	  this.currcode = newcode;
+	  //new Application().setDockIconBadge(tmp);
 	  int i = 0;
 	  String s = "";
 	  while (i <= 15-remain) {
@@ -163,6 +233,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	    i++;
 	  }
 	  progressLabel.setText(s);
+
+
 	}
       } catch (Exception ex) {
 	ex.printStackTrace();
@@ -235,6 +307,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       jf.setDefaultCloseOperation(2);
       jf.pack();
       
+      jf.setSize(180,60);
       jf.setLocation(dim.width  - jf.getSize().width -50,30);
       
       
