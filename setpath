@@ -1,1 +1,1 @@
-export CLASSPATH=forms-1.1.0.jar:i4jruntime.jar:.
+export CLASSPATH=jars/forms-1.1.0.jar:jars/i4jruntime.jar:.
