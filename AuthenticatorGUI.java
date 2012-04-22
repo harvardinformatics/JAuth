@@ -3,6 +3,7 @@ import java.io.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.*;
 
 import javax.swing.*;
 import java.awt.datatransfer.*;
@@ -13,6 +14,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import javax.imageio.ImageIO;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+//import com.install4j.api.launcher.Variables;
+
 //import com.apple.eawt.*;
 
 public final class AuthenticatorGUI extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
@@ -39,24 +43,40 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
   public Color             darkred = new Color(150,0,0);
 
-  public AuthenticatorGUI(String secret,Image image,Font font) {
+  public AuthenticatorGUI(Image image,Font font) {
+
     try {
       this.font  = font;
       this.image = image;
-
-      // Do the magic with the secret key
-      final byte[] keybytes = Base32String.decode(secret);
-
-      mac = Mac.getInstance("HMACSHA1");
-      mac.init(new SecretKeySpec(keybytes,""));
-
-      pcg = new PasscodeGenerator(mac);
 
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     componentInit();
+  }
+   
+  public AuthenticatorGUI(String secret,Image image, Font font) {
+    this(image,font);
+
+    this.setSecret(secret);
+  }
+
+  public void setSecret(String secret) {
+    try {
+      this.secret = secret;
+      
+      // Do the magic with the secret key
+      final byte[] keybytes = Base32String.decode(secret);
+      
+      mac = Mac.getInstance("HMACSHA1");
+      mac.init(new SecretKeySpec(keybytes,""));
+      
+      pcg = new PasscodeGenerator(mac);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   private void componentInit() {
@@ -257,36 +277,98 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       progressLabel.setText(s);
     }
   }
+
+  public static String getSecret(String[] args) {
+
+    try {
+      // Gets the secret from a number of places.
+      
+      String homedir    = System.getProperty("user.home");
+      
+      // Command line first
+      
+      if (args.length > 0  && args[0].indexOf("-secret=") == 0) {
+	return args[0].substring(8);
+      }
+      
+      if (args.length > 0) {
+	String secretfile                  = args[0];
+	
+	byte[]               buffer = new byte[(int) new File(secretfile).length()];
+	BufferedInputStream  f      = new BufferedInputStream(new FileInputStream(secretfile));
+
+	f.read(buffer);
+	return new String(buffer);
+      }
+      
+      // Jar file next
+      
+      // Read the .JAuth.rc file
+      if (new File(homedir + File.separator + ".JAuth.rc").exists()) {
+	String secretfile = homedir + File.separator + ".JAuth.rc";
+
+	FileInputStream fstream = new FileInputStream(secretfile);
+	DataInputStream in      = new DataInputStream(fstream);
+	BufferedReader  br      = new BufferedReader(new InputStreamReader(in));
+	String          strLine;
+
+	while ((strLine = br.readLine()) != null)   {
+	  if (strLine.indexOf("secret=") == 0) {
+	    return strLine.substring(7);
+	  }
+	}
+	in.close();
+      }
+      
+      if (new File(homedir + File.separator + ".google_authenticator").exists()) {
+	
+	String secretfile = homedir + File.separator + ".google_authenticator";
+
+	byte[]              buffer = new byte[(int) new File(secretfile).length()];
+	BufferedInputStream f      = new BufferedInputStream(new FileInputStream(secretfile));
+
+	f.read(buffer);
+	return new String(buffer);
+
+      } 
+      
+      //JOptionPane.showMessageDialog(null, "Installer secret is " + secret);
+      
+      JOptionPane.showMessageDialog(null, "Error reading secret string.");
+      System.exit(0);
+      
+    } catch (Exception e) {
+
+      JOptionPane.showMessageDialog(null, "Error reading secret string.");
+      e.printStackTrace();
+      System.exit(0);
+
+    }
+    return "";
+  }
   public static void main(String[] args) {
     String secret     = "";
     String secretfile = "";
 
     Image image = null;
-    Font font   = null;
+    Font  font  = null;
+    Image icon  = null;
 
     try {
       InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
       InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
+      InputStream iconstream  = AuthenticatorGUI.class.getResourceAsStream("icon.png");
+
+      //secret  = (String)Variables.getInstallerVariable("secret");
 
       font        = Font.createFont( Font.TRUETYPE_FONT,fontStream ); 
       image       = ImageIO.read(imagestream);
+      icon        = ImageIO.read(iconstream);
 
-      secretfile = ".google_authenticator";
-      String homedir    = System.getProperty("user.home");
+      secret      = AuthenticatorGUI.getSecret(args);
 
-      secretfile = homedir + File.separator + secretfile;
-      if (args.length > 0  && args[0].indexOf("-secret=") == 0) {
-        secret = args[0].substring(8);
-      } else if (args.length > 0) {
-	secretfile = args[0];
-      }
+      JOptionPane.showMessageDialog(null, "Secret is " + secret);
 
-      if (secret.equals("")) {
-        byte[] buffer = new byte[(int) new File(secretfile).length()];
-        BufferedInputStream f = new BufferedInputStream(new FileInputStream(secretfile));
-        f.read(buffer);
-        secret = new String(buffer);
-      } 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
@@ -301,13 +383,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       gui.addMouseListener(jf);
       //new Application().setDockIconImage(image);
 
-      jf.setIconImage(image);
+      jf.setIconImage(icon);
       jf.setUndecorated(true);
       jf.add(gui);
       jf.setDefaultCloseOperation(2);
       jf.pack();
       
-      jf.setSize(180,60);
+      jf.setSize(175,60);
       jf.setLocation(dim.width  - jf.getSize().width -50,30);
       
       
