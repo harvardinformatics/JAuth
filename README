@@ -11,8 +11,8 @@ http://code.google.com/p/google-authenticator/
 Explanatory bloggage at http://blog.jcuff.net/2011/09/beautiful-two-factor-desktop-client.html
 
 
-Demo
-----
+Demo - not functional anymore - must update
+-------------------------------------------
 
 http://minilims.bioteam.net/JAuth.demo.jnlp
 
@@ -80,3 +80,9 @@ Layout code from jgoodies.com
 -----------------------------
 JGoodies Karsten Lentzsch
 
+Installer Software Install4j from ej-technologies
+-------------------------------------------------
+
+Many thanks for the open-source license
+
+http://www.ej-technologies.com/products/install4j/overview.html
