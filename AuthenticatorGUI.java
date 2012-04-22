@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import java.lang.reflect.*;
+
 //import com.install4j.api.launcher.Variables;
 
 //import com.apple.eawt.*;
@@ -191,10 +193,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
     try {
 
-      Thread.currentThread().sleep(1000);
-
-      copyLabel.setForeground(Color.black);
-
+      if (evt.getSource() == copyLabel) {
+	Thread.currentThread().sleep(1000);
+	
+	copyLabel.setForeground(Color.black);
+      }
     } catch (InterruptedException ie){
       System.out.println("Thread interrupted");
     }
@@ -357,7 +360,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     try {
       InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
       InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
-      InputStream iconstream  = AuthenticatorGUI.class.getResourceAsStream("icon.png");
+      InputStream iconstream  = AuthenticatorGUI.class.getResourceAsStream("logo48.png");
 
       //secret  = (String)Variables.getInstallerVariable("secret");
 
@@ -367,14 +370,20 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       secret      = AuthenticatorGUI.getSecret(args);
 
-      JOptionPane.showMessageDialog(null, "Secret is " + secret);
+      //JOptionPane.showMessageDialog(null, "Secret is " + secret);
 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error reading secret string. This should be contained in [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
       System.exit(0);
     }
+
     try {
+
+      com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+      app.setDockIconImage(icon);
+      app.setAboutHandler(new JAuthAboutHandler(icon));
+
       Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
       AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
@@ -402,6 +411,24 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   
 }
 
+class JAuthAboutHandler implements com.apple.eawt.AboutHandler {
+  Image     icon;
+  ImageIcon imageicon;
+
+  public JAuthAboutHandler(Image icon) {
+    this.icon = icon;
+    this.imageicon = new ImageIcon(this.icon);
+  }
+
+  public void handleAbout(com.apple.eawt.AppEvent.AboutEvent e) {
+
+    String aboutGreeting = "JAuth OpenAuth desktop client";
+
+    JOptionPane.showMessageDialog(null,aboutGreeting,"JAuth",JOptionPane.INFORMATION_MESSAGE,imageicon);
+  }
+
+
+}
 class Counter extends Thread {
   public ActionListener l;
   public int    time = 0;

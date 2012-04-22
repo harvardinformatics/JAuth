@@ -519,6 +519,6 @@
   <buildIds buildAll="true">
     <mediaSet refId="26" />
   </buildIds>
-  <buildOptions verbose="true" faster="false" debug="false" />
+  <buildOptions verbose="true" faster="true" debug="false" />
 </install4j>
 
