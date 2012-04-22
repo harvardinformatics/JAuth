@@ -1,3 +1,5 @@
+package JAuth;
+
 import java.util.HashMap;
 
 /**

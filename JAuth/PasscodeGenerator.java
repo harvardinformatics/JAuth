@@ -1,3 +1,4 @@
+package JAuth;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;

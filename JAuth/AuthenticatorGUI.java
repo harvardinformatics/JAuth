@@ -1,3 +1,5 @@
+package JAuth;
+
 import java.util.*;
 import java.io.*;
 
@@ -358,9 +360,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     Image icon  = null;
 
     try {
-      InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("digital.ttf");
-      InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("lcd3.png");
-      InputStream iconstream  = AuthenticatorGUI.class.getResourceAsStream("logo48.png");
+      InputStream fontStream  = AuthenticatorGUI.class.getResourceAsStream("fonts/digital.ttf");
+      InputStream imagestream = AuthenticatorGUI.class.getResourceAsStream("logo/lcd3.png");
+      InputStream iconstream  = AuthenticatorGUI.class.getResourceAsStream("logo/logo48.png");
 
       //secret  = (String)Variables.getInstallerVariable("secret");
 
@@ -387,6 +389,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
       AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
+
+      String  pack  = AuthenticatorGUI.class.getPackage().getImplementationVersion();
+      System.out.println("Package " + pack);
       
       gui.addMouseMotionListener(jf);
       gui.addMouseListener(jf);
@@ -423,7 +428,6 @@ class JAuthAboutHandler implements com.apple.eawt.AboutHandler {
   public void handleAbout(com.apple.eawt.AppEvent.AboutEvent e) {
 
     String aboutGreeting = "JAuth OpenAuth desktop client";
-
     JOptionPane.showMessageDialog(null,aboutGreeting,"JAuth",JOptionPane.INFORMATION_MESSAGE,imageicon);
   }
 
