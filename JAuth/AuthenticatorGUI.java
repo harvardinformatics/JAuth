@@ -390,8 +390,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
 
-      String  pack  = AuthenticatorGUI.class.getPackage().getImplementationVersion();
-      System.out.println("Package " + pack);
+
       
       gui.addMouseMotionListener(jf);
       gui.addMouseListener(jf);
@@ -426,8 +425,9 @@ class JAuthAboutHandler implements com.apple.eawt.AboutHandler {
   }
 
   public void handleAbout(com.apple.eawt.AppEvent.AboutEvent e) {
-
-    String aboutGreeting = "JAuth OpenAuth desktop client";
+    String version  = AuthenticatorGUI.class.getPackage().getImplementationVersion();
+    String title    = AuthenticatorGUI.class.getPackage().getImplementationTitle();
+    String aboutGreeting = "JAuth OpenAuth desktop client version "+version;
     JOptionPane.showMessageDialog(null,aboutGreeting,"JAuth",JOptionPane.INFORMATION_MESSAGE,imageicon);
   }
 
