@@ -382,10 +382,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
     try {
 
-      com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-      app.setDockIconImage(icon);
-      app.setAboutHandler(new JAuthAboutHandler(icon));
-
+      /*
+      if (Class.forName("com.apple.eawt.Application",false,null)!= null) {
+	com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+	app.setDockIconImage(icon);
+	app.setAboutHandler(new JAuthAboutHandler(icon));
+	}*/
       Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
       AuthenticatorGUI   gui  = new AuthenticatorGUI(secret,image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
@@ -415,6 +417,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   
 }
 
+/*
 class JAuthAboutHandler implements com.apple.eawt.AboutHandler {
   Image     icon;
   ImageIcon imageicon;
@@ -433,6 +436,7 @@ class JAuthAboutHandler implements com.apple.eawt.AboutHandler {
 
 
 }
+*/
 class Counter extends Thread {
   public ActionListener l;
   public int    time = 0;

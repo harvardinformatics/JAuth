@@ -6,7 +6,7 @@
   <entry targetMediaFileId="31" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_windows_1_0.exe" newVersion="1.0" newMediaFileId="31" fileSize="18030080" bundledJre="windows-x86-1.7.0_03_us_only" archive="false">
     <comment language="en" />
   </entry>
-  <entry targetMediaFileId="32" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_unix_1_0.sh" newVersion="1.0" newMediaFileId="32" fileSize="17984019" bundledJre="linux-x86-1.7.0_03_client_only" archive="false">
+  <entry targetMediaFileId="32" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_unix_1_0.sh" newVersion="1.0" newMediaFileId="32" fileSize="17983915" bundledJre="linux-x86-1.7.0_03_client_only" archive="false">
     <comment language="en" />
   </entry>
 </updateDescriptor>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="5.0.11" transformSequenceNumber="3">
-  <directoryPresets config="/Users/mclamp/git/JAuth/logo" />
+  <directoryPresets config="/Users/mclamp/git/JAuth/JAuth/logo" />
   <application name="JAuth OpenAuth Desktop Client" distributionSourceDir="" applicationId="1058-8236-7109-9046" mediaDir="/Users/mclamp/git/JAuth/Installers" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="JAuth" publisher="Bioteam/Harvard University Research Computing and Informatics Groups" publisherWeb="http://bioteam.net http://rc.fas.harvard.edu" version="1.0" allPathsRelative="false" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.4" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -27,7 +27,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="JAuth" id="29" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="/Users/mclamp/git/JAuth/logo/logo.icns" swtApp="false" fileset="">
+    <launcher name="JAuth" id="29" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="/Users/mclamp/git/JAuth/JAuth/logo/logo.icns" swtApp="false" fileset="">
       <executable name="JAuth" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
       </executable>
@@ -37,7 +37,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="AuthenticatorGUI" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="JAuth.AuthenticatorGUI" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <archive location="JAuth.jar" failOnError="false" />
         </classPath>
@@ -52,9 +52,9 @@
         <content />
       </customScript>
       <iconImageFiles>
-        <file path="/Users/mclamp/git/JAuth/logo16.png" />
-        <file path="/Users/mclamp/git/JAuth/logo32.png" />
-        <file path="/Users/mclamp/git/JAuth/logo48.png" />
+        <file path="/Users/mclamp/git/JAuth/JAuth/logo/logo16.png" />
+        <file path="/Users/mclamp/git/JAuth/JAuth/logo/logo32.png" />
+        <file path="/Users/mclamp/git/JAuth/JAuth/logo/logo48.png" />
       </iconImageFiles>
     </launcher>
   </launchers>
@@ -65,24 +65,24 @@
       <customAttributes />
     </autoUpdate>
     <applications>
-      <application name="" id="installer" customizedId="" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" enabled="true" commentSet="false" comment="" fileset="" customIcnsFile="/Users/mclamp/git/JAuth/logo/logo.icns" customIcoFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+      <application name="" id="installer" customizedId="" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" enabled="true" commentSet="false" comment="" fileset="" customIcnsFile="/Users/mclamp/git/JAuth/JAuth/logo/logo.icns" customIcoFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="customIconImageFiles">
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>/Users/mclamp/git/JAuth/logo16.png</string>
+                    <string>/Users/mclamp/git/JAuth/JAuth/logo/logo16.png</string>
                   </object>
                 </void>
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>/Users/mclamp/git/JAuth/logo32.png</string>
+                    <string>/Users/mclamp/git/JAuth/JAuth/logo/logo32.png</string>
                   </object>
                 </void>
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>/Users/mclamp/git/JAuth/logo48.png</string>
+                    <string>/Users/mclamp/git/JAuth/JAuth/logo/logo48.png</string>
                   </object>
                 </void>
               </void>
