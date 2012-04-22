@@ -283,7 +283,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
 
-  public static String getSecret(String[] args) {
+  public static String getSecret(String[] args,Icon icon) {
 
     try {
       // Gets the secret from a number of places.
@@ -337,10 +337,31 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
       } 
       
+     
       //JOptionPane.showMessageDialog(null, "Installer secret is " + secret);
-      
-      JOptionPane.showMessageDialog(null, "Error reading secret string.");
-      System.exit(0);
+
+      String secret = (String)JOptionPane.showInputDialog(
+							  null,
+							  "Enter secret key: ",
+							  "Enter secret key",
+							  JOptionPane.PLAIN_MESSAGE,
+							  null,
+							  null,
+							  "");
+ 
+      String secretfile = homedir + File.separator + ".JAuth.rc";
+
+      try {
+	BufferedWriter f = new BufferedWriter(new FileWriter(new File(secretfile)));
+	f.write("secret="+secret);
+	f.newLine();
+	f.close();
+	return secret;
+      } catch (IOException e) {
+	JOptionPane.showMessageDialog(null, "Error writing secret string to [" + secretfile + "]", "JAuth Error", JOptionPane.ERROR_MESSAGE);
+	e.printStackTrace();
+	System.exit(0);
+      }
       
     } catch (Exception e) {
 
@@ -370,7 +391,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       image       = ImageIO.read(imagestream);
       icon        = ImageIO.read(iconstream);
 
-      secret      = AuthenticatorGUI.getSecret(args);
+      secret      = AuthenticatorGUI.getSecret(args,new ImageIcon(icon));
 
       //JOptionPane.showMessageDialog(null, "Secret is " + secret);
 
