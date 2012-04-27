@@ -518,6 +518,8 @@
   </mediaSets>
   <buildIds buildAll="true">
     <mediaSet refId="26" />
+    <mediaSet refId="31" />
+    <mediaSet refId="32" />
   </buildIds>
   <buildOptions verbose="false" faster="false" debug="false" />
 </install4j>
