@@ -121,6 +121,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     codeField.setPreferredSize(new Dimension(100,30));
     copyLabel.setPreferredSize(new Dimension(60,30));
     nextLabel.setPreferredSize(new Dimension(60,30));
+    codeField.addMouseListener(this);
     copyLabel.addMouseListener(this);
     nextLabel.addMouseListener(this);
 
@@ -159,13 +160,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     if (evt.getSource() == closeLabel) {
       System.exit(0);
     }
+    if (evt.getClickCount() == 2) {
+      copyCodeToClipboard();
+    }
   }
-  public void mouseDragged(MouseEvent evt) { }
-  public void mousePressed(MouseEvent evt) { 
-    // Copies the code to the clipboard when the copy label is clicked
 
-    if (evt.getSource() == copyLabel) {
-
+  private void copyCodeToClipboard() {
       String tmp = codeField.getText();
 
       tmp = tmp.substring(0,3) + tmp.substring(4);
@@ -173,7 +173,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       StringSelection ss = new StringSelection(tmp);
 
       Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+  }
 
+  public void mouseDragged(MouseEvent evt) { }
+  public void mousePressed(MouseEvent evt) {
+    if (evt.getSource() == copyLabel) {
+      copyCodeToClipboard();
       copyLabel.setForeground(this.darkred);
 
     } else if (evt.getSource() == nextLabel) {
