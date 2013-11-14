@@ -4,20 +4,20 @@ import java.util.HashMap;
 
 /**
  * Encodes arbitrary byte arrays as case-insensitive base-32 strings  
- * 
+ *
  * @author sweis@google.com (Steve Weis)
  * @author Neal Gafter
  */
 public class Base32String {
   // singleton
-  
+
   private static final Base32String INSTANCE = 
     new Base32String("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"); // RFC 4668/3548
 
   static Base32String getInstance() { 
     return INSTANCE;
   }
-  
+
   //32 alpha-numeric characters. Excluding 0, 1, O, and I
   private String ALPHABET;
   private char[] DIGITS;
@@ -68,8 +68,8 @@ public class Base32String {
         bitsLeft -= 8;
       }
     }
-    // We'll ignore leftover bits for now. 
-    // 
+    // We'll ignore leftover bits for now.
+    //
     // if (next != outLength || bitsLeft >= SHIFT) {
     //  throw new DecodingException("Bits left: " + bitsLeft);
     // }
@@ -116,7 +116,7 @@ public class Base32String {
     }
     return result.toString();
   }
-  
+
   @Override
   // enforce that this class is a singleton
   public Object clone() throws CloneNotSupportedException {
