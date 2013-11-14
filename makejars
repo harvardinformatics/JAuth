@@ -1,0 +1,27 @@
+#!/bin/sh
+
+. setpath
+
+echo "Making GUI"
+javac JAuth/AuthenticatorGUI.java
+echo "Main-Class: JAuth.AuthenticatorGUI" > JAuth/manifest
+echo "Name: JAuth" >> JAuth/manifest
+echo "Implementation-Title: JAuth" >> JAuth/manifest
+echo "Implementation-Version: 1.0" >> JAuth/manifest
+echo "Specification-Title: JAuth" >> JAuth/manifest
+echo "Specification-Version: 1.0" >> JAuth/manifest
+echo "Created-By: Michele Clamp, James Cuff, John Brunelle" >> JAuth/manifest
+jar cmf JAuth/manifest JAuth.jar JAuth/*.class JAuth/fonts/*.ttf JAuth/logo/*.png JAuth/logo/*.icns
+rm -rf JAuth/manifest JAuth/*.class
+
+echo "Making CLI"
+javac JAuth/AuthenticatorCLI.java
+echo "Main-Class: JAuth.AuthenticatorCLI" > JAuth/manifest
+echo "Name: JAuth" >> JAuth/manifest
+echo "Implementation-Title: JAuth" >> JAuth/manifest
+echo "Implementation-Version: 1.0" >> JAuth/manifest
+echo "Specification-Title: JAuth" >> JAuth/manifest
+echo "Specification-Version: 1.0" >> JAuth/manifest
+echo "Created-By: Michele Clamp, James Cuff, John Brunelle" >> JAuth/manifest
+jar cmf JAuth/manifest JAuthCLI.jar JAuth/*.class
+rm -rf JAuth/manifest JAuth/*.class

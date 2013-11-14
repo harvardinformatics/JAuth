@@ -1,14 +1,16 @@
 Authors : James Cuff and Michele Clamp 2011/2012
--------------------------------------------
+-----------------------------------------------
 
 Description
 ------------
 
-JAuth is a reference desktop client for the google authenticator. Intended 
-as an alternative to the iPhone Google Authenticator app and similar.
-http://code.google.com/p/google-authenticator/
+JAuth is a reference desktop and command line client for the google authenticator.
+Intended as an alternative to the iPhone/Android Google Authenticator app and similar.
+Refer to http://code.google.com/p/google-authenticator for more information.
 
-Explanatory bloggage at http://blog.jcuff.net/2011/09/beautiful-two-factor-desktop-client.html
+Explanatory bloggage at:
+ http://blog.jcuff.net/2011/09/beautiful-two-factor-desktop-client.html
+ http://blog.jcuff.net/2011/02/cli-java-based-google-authenticator.html
 
 Installation using GUI Installer
 --------------------------------
@@ -22,34 +24,35 @@ All installers available from https://github.com/mclamp/JAuth/tree/master/Instal
 Installation
 ------------
 
-To compile and run in bash
+To compile and run in shell:
+  $ ./makejars
 
-  ./makejar
-
-then to run 
-
-  java -jar JAuth.jar
-
+To run:
+  $ java -jar JAuth.jar
 or
-
-  java -jar JAuth.jar <myauthfile>
+  $ java -jar JAuth.jar <myauthfile>
 
 By default it looks in the home directory for a file called .google_authenticator
 
-Alternatively :
+Alternatively:
+  $ java -jar JAuth.jar -secret=MY_SECRET_KEY
 
-  java -jar JAuth.jar -secret=MY_SECRET_KEY
+For command line version, replace JAuth.jar with JAuthCLI.jar
+Output should something as following:
+Authenticator Started!
+:----------------------------:--------:
+:       Code Wait Time       :  Code  :
+:----------------------------:--------:
++++++++++++++++++++++++++++++: 000000 :
 
 Webstart
 --------
 
-Initialize your keystore (do this only once)
+Initialize your keystore (do this only once):
+  $ keytool -genkey -alias JAuth -keyalg RSA -keystore keystore.jks -keysize 2048
 
-  keytool -genkey -alias JAuth -keyalg RSA -keystore keystore.jks -keysize 2048
-
-Sign your jar
-
-  jarsigner -keystore keystore.jks  JAuth.jar JAuth
+Sign your GUI jar:
+  $ jarsigner -keystore keystore.jks JAuth.jar JAuth
 
 Edit the JAuth.jnlp file to reflect your local webserver path.
 Copy the JAuth.jnlp and JAuth.jar files into the webserver path.
@@ -57,6 +60,7 @@ Copy the JAuth.jnlp and JAuth.jar files into the webserver path.
 Acknowledgements
 ----------------
 
+Thanks to JGoodies for forms library (http://www.jgoodies.com/downloads/libraries)
 Thanks to bookest (Christopher Grim) for the secret key dialog code
 
 Installer Software Install4j from ej-technologies
@@ -69,7 +73,6 @@ http://www.ej-technologies.com/products/install4j/overview.html
 PasscodeGenerator and Base32String code from
 --------------------------------------------
 sweis@google.com
-
 
 LCD Font from
 -------------
@@ -88,4 +91,3 @@ modified from http://www.e-lab.de/diverse/LCD2x16.jpg
 Layout code from jgoodies.com
 -----------------------------
 JGoodies Karsten Lentzsch
-
