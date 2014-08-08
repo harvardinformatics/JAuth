@@ -14,8 +14,8 @@ Installation using GUI Installer
 --------------------------------
 
 OS X       https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_macos_1_0.dmg
-Windows    https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_windows_1_0.dmg
-Linux      https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_unix_1_0.dmg
+Windows    https://github.com/mclamp/JAuth/blob/master/Installers/JAuth_windows_1_0.exe
+Linux      https://github.com/mclamp/JAuth/blob/master/Installers/JAuth_unix_1_0.sh
 
 All installers available from https://github.com/mclamp/JAuth/tree/master/Installers
 
