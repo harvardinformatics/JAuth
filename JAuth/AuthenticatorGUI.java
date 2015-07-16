@@ -43,7 +43,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public JLabel            progressLabel = new JLabel("");
   public JLabel            closeLabel    = new JLabel("x");
   public JLabel		   	   nameButton    = new JLabel("");
-  public JButton		   editButton 	 = new JButton("Edit");
+  public JLabel		   	   editButton 	 = new JLabel("Edit");
   public JButton 		   enterButton	 = new JButton("Enter");
   public JPasswordField	   pass			 = new JPasswordField(4);
   public JFrame			   frame		 = new JFrame();
@@ -211,6 +211,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  table.add(bottom);
 	  table.add(saveButton);
 	  saveButton.addMouseListener(this);
+	  table.getRootPane().setDefaultButton(saveButton);
+	  saveButton.addKeyListener(new MyKeyListener(this));
 	  
 	  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	  int w = frame.getSize().width;
@@ -572,8 +574,27 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       System.out.println("Thread interrupted");
     }
   }
+  public void keyPressed(KeyEvent evt) {
+	  System.out.println("Hello");
+	  if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+		  if(firstFrame.isActive()) {
+			  password = newPass.getText();
+		    	firstFrame.dispose();
+		    	this.setVisible(true); 
+		  } else if(frame.isActive()) {
+			  String passTry = pass.getText();
+		    	if(passTry.equals(password)) {
+		    		checkPass = true;
+					frame.dispose();
+					edit();
+		    	}  
+		  } else if(table.isActive()) {
+			  save();
+		      table.dispose();
+		  }
+	  }
+  }
 
-  
   public String getNewCode() {
     if(!secret.trim().equals("")) {
     	try {
@@ -657,6 +678,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     }
   }
 
+  
   public static String getSecret(String[] args,Icon icon) {
 
     try {
@@ -747,74 +769,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     return "";
   }
   
-  public void fileChange() {
-	  try {
-		  FileInputStream fis = new FileInputStream("JAuth_Save");
-		  BufferedInputStream bis = new BufferedInputStream(fis);
-		  
-		  byte[] save = new byte[bis.available()];
-		  
-		  for(int i = 0; i < save.length; i++) {
-			  save[i] = (byte) bis.read();
-		  }
-		  bis.close();
-		  
-		  FileWriter fw = new FileWriter("JAuth_Save");
-		  BufferedWriter bw = new BufferedWriter(fw);
-		  
-		  String s = new String(save);
-		  rows = Integer.parseInt(s.substring(0,s.indexOf("+")));
-		  String[] lines = new String[rows+1];
-		  for(int i = 0; i < rows+1; i++) {
-			  lines[i] = s.substring(0,s.indexOf("+"));
-			  s = s.substring(s.indexOf("+")+1);
-		  }
-		  
-		  for(String line: lines) {
-			  bw.write(line);
-			  bw.newLine();
-		  }
-		bw.close();  
-	  } catch (Exception e) {
-		  e.printStackTrace();
-	  }
-  }
-  private void saveWriter() {
-	  
-	  try {
-	    BufferedWriter bf = new BufferedWriter(new FileWriter(new File("JAuth_Save")));
-		bf.write(rows+"");
-		bf.newLine();
-		if(password != null) {
-			bf.write(password);
-		}
-		bf.newLine();
-		
-		for(int i = 0; i < providers.size(); i++) {
-			bf.write(providers.get(i)+"*");
-			bf.write(secrets.get(i).trim());
-			bf.newLine();
-		}
-		bf.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-  }
   private String saveReader() {
-//	  try {
-//		FileReader fr = new FileReader("JAuth_Save");
-//		BufferedReader br = new BufferedReader(fr);
-//		String read = "";
-//		String line = "";
-//		while((line = br.readLine()) != null) {
-//			read += line + "+";
-//		}
-//		return read;
-//	} catch (Exception e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//	  return "";
 	  String toReturn = "" + rows + "+" + password + "+";
 	  for(int i = 0; i < rows -1; i++) {
 		  toReturn += providers.get(i) + "*";

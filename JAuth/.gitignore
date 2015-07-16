@@ -10,3 +10,5 @@
 /PasscodeGenerator$IntervalClock.class
 /PasscodeGenerator$Signer.class
 /PasscodeGenerator.class
+/KeyListenTest.class
+/MyKeyListener.class
