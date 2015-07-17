@@ -461,6 +461,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       //closeLabel.setBorder(BorderFactory.createLineBorder(Color.red));
 
       copyLabel.setToolTipText("Click to copy code");
+      nextLabel.setToolTipText("Click for next code");
+      editButton.setToolTipText("Edit secrets");
+      nextButton.setToolTipText("Display next provider");
+      closeLabel.setToolTipText("Exit");
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -515,7 +519,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseEntered(MouseEvent evt) { 
 	  if(evt.getSource() == copyLabel) {
 		  copyLabel.setForeground(Color.BLUE);
-		  copyLabel.createToolTip();
 	  }
 	  if(evt.getSource() == nextLabel) {
 		  nextLabel.setForeground(Color.BLUE);
