@@ -50,7 +50,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public JButton		   addButton	 = new JButton("+");
   public JButton 		   minusButton   = new JButton("-");
   public JButton 		   saveButton	 = new JButton("Save");
-  public JFrame			   table		 = new JFrame("Edit Providers");
+  public JFrame			   table		 = new JFrame("Add Providers & Secrets");
   public JPasswordField	   newPass 		 = new JPasswordField(4);
   public JButton		   enterButton2  = new JButton("Enter");
   public JFrame 		   firstFrame	 = new JFrame();
@@ -508,11 +508,45 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     
   }
 
-  public void mouseEntered(MouseEvent evt) { }
-  public void mouseExited (MouseEvent evt) { }
+  public void mouseEntered(MouseEvent evt) { 
+	  if(evt.getSource() == copyLabel) {
+		  copyLabel.setForeground(Color.BLUE);
+	  }
+	  if(evt.getSource() == nextLabel) {
+		  nextLabel.setForeground(Color.BLUE);
+	  }
+	  if(evt.getSource() == editButton) {
+		  editButton.setForeground(Color.BLUE);
+	  }
+	  if(evt.getSource() == nextButton) {
+		  nextButton.setForeground(Color.BLUE);
+	  }
+	  if(evt.getSource() == closeLabel) {
+		  closeLabel.setForeground(Color.BLUE);
+	  }
+  }
+  public void mouseExited (MouseEvent evt) { 
+	  if(evt.getSource() == copyLabel) {
+		  copyLabel.setForeground(Color.BLACK);
+	  }
+	  if(evt.getSource() == nextLabel) {
+		  nextLabel.setForeground(Color.BLACK);
+	  }
+	  if(evt.getSource() == editButton) {
+		  editButton.setForeground(new Color(150,150,150));
+	  }
+	  if(evt.getSource() == nextButton) {
+		  nextButton.setForeground(new Color(150,150,150));
+	  }
+	  if(evt.getSource() == closeLabel) {
+		  closeLabel.setForeground(new Color(150,150,150));
+	  }
+  }
   public void mouseClicked(MouseEvent evt) {
     if (evt.getSource() == closeLabel) {
-        save();
+        if(table.isVisible()) {
+        	save();
+        }
     	saveEncrypt();
     	System.exit(0);
     }
@@ -569,6 +603,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     	password = newPass.getText();
     	firstFrame.dispose();
     	this.setVisible(true);
+    	edit();
     } else if (evt.getSource() == minusButton) {
     	deleteRow();
     }
