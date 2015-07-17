@@ -86,7 +86,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   private PasswordProtection keyPassword = new PasswordProtection("pw-secret".toCharArray());;
 
   public AuthenticatorGUI() {
-	  rows = 1;
+	  rows = 2;
+	  password = "";
+	  providers.add("RCFAS");
+	  secrets.add("DUMMY-SECRET");
 	  saveEncrypt();
   }
   public AuthenticatorGUI(Image image,Font font) {
@@ -457,6 +460,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       nextButton.setForeground(c);
       //closeLabel.setBorder(BorderFactory.createLineBorder(Color.red));
 
+      copyLabel.setToolTipText("Click to copy code");
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -511,6 +515,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseEntered(MouseEvent evt) { 
 	  if(evt.getSource() == copyLabel) {
 		  copyLabel.setForeground(Color.BLUE);
+		  copyLabel.createToolTip();
 	  }
 	  if(evt.getSource() == nextLabel) {
 		  nextLabel.setForeground(Color.BLUE);
