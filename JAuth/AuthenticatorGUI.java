@@ -138,7 +138,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void setPassword() {
 	  FormLayout layout = new FormLayout("fill:pref:grow","fill:pref:grow,fill:pref:grow,fill:pref:grow");
 	  firstFrame.setLayout(layout);
-	  JLabel title = new JLabel("Create Password");
+	  JLabel title = new JLabel("Create PIN");
 	  CellConstraints cc = new CellConstraints();
 	  firstFrame.add(title, cc.xy(1,1));
 	  firstFrame.add(newPass, cc.xy(1,2));
@@ -157,6 +157,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       firstFrame.setMinimumSize(new Dimension(200,100));
       firstFrame.setAlwaysOnTop(true);
       firstFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+      
+      firstFrame.addKeyListener(new MyKeyListener(this));
+      enterButton2.addKeyListener(new MyKeyListener(this));
+      title.addKeyListener(new MyKeyListener(this));
+      newPass.addKeyListener(new MyKeyListener(this));
+      
 	  firstFrame.setVisible(true);
   }
   
@@ -181,6 +187,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	      doc.setDocumentFilter(new DocumentSizeFilter(23));
 		  JTextField name = new JTextField(providers.get(i));
 		  JTextField secret = new JTextField(secrets.get(i));
+		  name.addKeyListener(new MyKeyListener(this));
+		  secret.addKeyListener(new MyKeyListener(this));
 		  if(!name.getText().equals("")) {
 			  table.add(name);
 			  table.add(secret);
@@ -213,6 +221,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  saveButton.addMouseListener(this);
 	  table.getRootPane().setDefaultButton(saveButton);
 	  saveButton.addKeyListener(new MyKeyListener(this));
+	  table.addKeyListener(new MyKeyListener(this));
+	  minusButton.addKeyListener(new MyKeyListener(this));
 	  
 	  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	  int w = frame.getSize().width;
@@ -230,9 +240,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       table.setMaximumSize(new Dimension(320,50*(rows+1)));
       table.setMinimumSize(new Dimension(320,50*(rows+1)));
       table.setLocation(x,y);
-	  table.setVisible(true);
-	  
-	  
+	  table.setVisible(true);  
 	  
   } 
   public void addRow() {
@@ -368,6 +376,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  int h = frame.getSize().height;
 		  int x = (dim.width-w)/2;
 		  int y = (dim.height-h)/2;
+		  
+		  frame.addKeyListener(new MyKeyListener(this));
+		  title.addKeyListener(new MyKeyListener(this));
+		  enterButton.addKeyListener(new MyKeyListener(this));
+		  pass.addKeyListener(new MyKeyListener(this));
       
 		  frame.setLocation(x,y);
 		  frame.setVisible(true);
@@ -499,7 +512,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void mouseExited (MouseEvent evt) { }
   public void mouseClicked(MouseEvent evt) {
     if (evt.getSource() == closeLabel) {
-        saveEncrypt();
+        save();
+    	saveEncrypt();
     	System.exit(0);
     }
   }
