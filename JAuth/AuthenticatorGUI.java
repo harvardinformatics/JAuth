@@ -80,7 +80,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public String            nextcode;
 
   public Color             darkred = new Color(150,0,0);
-  
+    
   private byte[]		   iv = {(byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, };	
   private KeyStore 		   keyStore;
   private PasswordProtection keyPassword = new PasswordProtection("pw-secret".toCharArray());;
@@ -277,15 +277,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  table.remove(boxes.remove(boxes.size()-1));
 		  rows--;
 		  if(rows == 1) {
-		      table.setMaximumSize(new Dimension(320,90));
-		      table.setMinimumSize(new Dimension(320,90));
-	    	  table.setSize(320,90);
-	      }
-	      else {
-	          table.setMaximumSize(new Dimension(320,50*(rows+1)));
-	          table.setMinimumSize(new Dimension(320,50*(rows+1)));
-	    	  table.setSize(320,50*(rows+1));
-	      }
+			  table.setMaximumSize(new Dimension(320,90));
+			  table.setMinimumSize(new Dimension(320,90));
+			  table.setSize(320,90);
+		  }
+		  else {
+			  table.setMaximumSize(new Dimension(320,50*(rows+1)));
+			  table.setMinimumSize(new Dimension(320,50*(rows+1)));
+			  table.setSize(320,50*(rows+1));
+		  }
 	  }
 	  while(providers.size() > rows-1 && secrets.size() > rows-1) {
 	      providers.remove(providers.size()-1);
@@ -538,7 +538,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  copyLabel.setForeground(Color.BLACK);
 	  }
 	  if(evt.getSource() == nextLabel) {
-		  nextLabel.setForeground(Color.BLACK);
+		  nextLabel.setForeground(codeField.getForeground());
 	  }
 	  if(evt.getSource() == editButton) {
 		  editButton.setForeground(new Color(150,150,150));
@@ -615,7 +615,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     } else if (evt.getSource() == minusButton) {
     	deleteRow();
     }
-
   }      
   public void mouseMoved  (MouseEvent evt) { }
   public void mouseReleased(MouseEvent evt) { 
