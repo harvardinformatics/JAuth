@@ -69,6 +69,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public ArrayList<String> secrets = new ArrayList(0);
   public ArrayList<String> providers = new ArrayList(0);
   public int			   placeInList = 0;
+  public int 			   placeInBoxes = -1;
   
   public Mac               mac;
   public PasscodeGenerator pcg;
@@ -273,18 +274,27 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void deleteRow() {
 	  if(rows != 1)
 	  {
-		  table.remove(boxes.remove(boxes.size()-1));
-		  table.remove(boxes.remove(boxes.size()-1));
-		  rows--;
-		  if(rows == 1) {
-			  table.setMaximumSize(new Dimension(320,90));
-			  table.setMinimumSize(new Dimension(320,90));
-			  table.setSize(320,90);
+		  if(placeInBoxes != -1) {
+			  table.remove(boxes.remove(placeInBoxes));
+			  if(placeInBoxes%2 != 1 || placeInBoxes == 0){
+				  table.remove(boxes.remove(placeInBoxes));
+			  } else {
+				  table.remove(boxes.remove(placeInBoxes-1));
+			  }
+			  rows--;
+		  } else {
+				table.remove(boxes.remove(boxes.size() - 1));
+				table.remove(boxes.remove(boxes.size() - 1));
+				rows--;
 		  }
-		  else {
-			  table.setMaximumSize(new Dimension(320,50*(rows+1)));
-			  table.setMinimumSize(new Dimension(320,50*(rows+1)));
-			  table.setSize(320,50*(rows+1));
+		  if (rows == 1) {
+			  table.setMaximumSize(new Dimension(320, 90));
+			  table.setMinimumSize(new Dimension(320, 90));
+			  table.setSize(320, 90);
+		  } else {
+			  table.setMaximumSize(new Dimension(320, 50 * (rows + 1)));
+			  table.setMinimumSize(new Dimension(320, 50 * (rows + 1)));
+			  table.setSize(320, 50 * (rows + 1));
 		  }
 	  }
 	  while(providers.size() > rows-1 && secrets.size() > rows-1) {
@@ -295,6 +305,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(placeInList > providers.size()) {
 		  placeInList = 0;
 	  }
+	  placeInBoxes = -1;
   }
   public void save() {
 	 for(int i = 0; i < (rows-1)*2; i++) {
@@ -561,9 +572,17 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
   public void mouseDragged(MouseEvent evt) { }
   public void mousePressed(MouseEvent evt) { 
-    // Copies the code to the clipboard when the copy label is clicked
-
-    if (evt.getSource() == copyLabel) {
+	  if(table.isVisible()) {
+	    	Component c = table.getFocusOwner();
+	    	for(int i = 0; i < boxes.size(); i++) {
+	    		if(c.equals(boxes.get(i))) {
+	    			placeInBoxes = i;
+	    		}
+	    	}
+	    }
+    
+	    // Copies the code to the clipboard when the copy label is clicked  
+	if (evt.getSource() == copyLabel) {
 
       String tmp = codeField.getText();
 
