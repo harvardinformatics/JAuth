@@ -178,6 +178,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  saveButton.removeMouseListener(this);
 	  addButton.removeMouseListener(this);
 	  minusButton.removeMouseListener(this);
+	  if(table.getKeyListeners().length > 0) {
+		  saveButton.removeKeyListener(saveButton.getKeyListeners()[0]);
+		  table.removeKeyListener(table.getKeyListeners()[0]);
+		  minusButton.removeKeyListener(minusButton.getKeyListeners()[0]);
+		  addButton.removeKeyListener(addButton.getKeyListeners()[0]);
+	  }
 	  
 	  table.setLayout(layout);
 	  
@@ -224,9 +230,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  table.add(saveButton);
 	  saveButton.addMouseListener(this);
 	  table.getRootPane().setDefaultButton(saveButton);
+	  
 	  saveButton.addKeyListener(new MyKeyListener(this));
 	  table.addKeyListener(new MyKeyListener(this));
 	  minusButton.addKeyListener(new MyKeyListener(this));
+	  addButton.addKeyListener(new MyKeyListener(this));
 	  
 	  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	  int w = frame.getSize().width;
@@ -379,7 +387,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  frame.setLayout(new FormLayout("40px,115px,40px","fill:pref:grow,fill:pref:grow,fill:pref:grow"));
 		  CellConstraints cc = new CellConstraints();
 		  frame.setSize(new Dimension(190,100));
-//		  pass.
 		  title.setPreferredSize(new Dimension(100,20));
 		  frame.add(title, cc.xy(2,1));
 		  frame.add(pass, cc.xy(2,2));
@@ -391,6 +398,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  int x = (dim.width-w)/2;
 		  int y = (dim.height-h)/2;
 		  
+		  if(frame.getKeyListeners().length > 0) {
+			  frame.removeKeyListener(frame.getKeyListeners()[0]);
+			  enterButton.removeKeyListener(enterButton.getKeyListeners()[0]);
+			  pass.removeKeyListener(pass.getKeyListeners()[0]);
+			  pass.removeKeyListener(pass.getKeyListeners()[0]);
+		  }
+		  
+		  System.out.println(pass.getKeyListeners().length + " Listeners");
+		  
 		  frame.addKeyListener(new MyKeyListener(this));
 		  title.addKeyListener(new MyKeyListener(this));
 		  enterButton.addKeyListener(new MyKeyListener(this));
@@ -398,6 +414,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       
 		  frame.setLocation(x,y);
 		  frame.setVisible(true);
+		  
 	  }
   }
 
@@ -575,7 +592,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(table.isVisible()) {
 	    	Component c = table.getFocusOwner();
 	    	for(int i = 0; i < boxes.size(); i++) {
-	    		if(c.equals(boxes.get(i))) {
+	    		if(c != null && c.equals(boxes.get(i))) {
 	    			placeInBoxes = i;
 	    		}
 	    	}
