@@ -140,25 +140,36 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
   
   public void setPassword() {
-	  FormLayout layout = new FormLayout("fill:pref:grow","fill:pref:grow,fill:pref:grow,fill:pref:grow");
+	  FormLayout layout = new FormLayout("fill:pref:grow,150px","fill:pref:grow,fill:pref:grow,fill:pref:grow");
 	  firstFrame.setLayout(layout);
-	  JLabel title = new JLabel("Create PIN");
+	  JLabel title = new JLabel("  Create PIN to edit secrets");
 	  CellConstraints cc = new CellConstraints();
 	  firstFrame.add(title, cc.xy(1,1));
 	  firstFrame.add(newPass, cc.xy(1,2));
 	  firstFrame.add(enterButton2, cc.xy(1,3));
 	  enterButton2.addMouseListener(this);
 	  
+	  ImageIcon icon;
+	  JLabel logo = new JLabel();
+	  try{
+		  icon = new ImageIcon("logo/logo48.png");
+		  logo.setIcon(icon);
+		  firstFrame.add(logo, cc.xywh(2,1,1,3));
+		  System.out.println(logo.getGraphics());
+	  } catch(Exception e) {
+		  e.printStackTrace();
+	  }
+	  
 	  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	  int w = firstFrame.getSize().width;
       int h = firstFrame.getSize().height;
       int x = (dim.width-w);
       int y = (0);
-      firstFrame.setLocation(x-250,y);
+      firstFrame.setLocation(x-230,y);
       
-      firstFrame.setSize(200,100);
-      firstFrame.setMaximumSize(new Dimension(200,100));
-      firstFrame.setMinimumSize(new Dimension(200,100));
+      firstFrame.setSize(250,100);
+      firstFrame.setMaximumSize(new Dimension(250,100));
+      firstFrame.setMinimumSize(new Dimension(250,100));
       firstFrame.setAlwaysOnTop(true);
       firstFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
       
