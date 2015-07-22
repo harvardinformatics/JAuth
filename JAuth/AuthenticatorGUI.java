@@ -163,9 +163,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	  int w = firstFrame.getSize().width;
       int h = firstFrame.getSize().height;
-      int x = (dim.width-w);
-      int y = (0);
-      firstFrame.setLocation(x-250,y);
+      int x = ((dim.width-w)/2-70);
+      int y = ((dim.height-h)/2-20);
+      firstFrame.setLocation(x,y);
       
       firstFrame.setSize(220,70);
       firstFrame.setMaximumSize(new Dimension(220,70));
@@ -179,6 +179,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       newPass.addKeyListener(new MyKeyListener(this));
             
 	  firstFrame.setVisible(true);
+	  firstFrame.requestFocus();
   }
   
   public void edit() {
@@ -637,7 +638,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       }
       this.currcode = null;
       
-    } else if (evt.getSource() == editButton) {
+    } else if (evt.getSource() == editButton && !firstFrame.isVisible()) {
     //allows access to secrets/providers lists if password is entered
     	editPasswordCheck();
     	if(checkPass) {
