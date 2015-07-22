@@ -269,6 +269,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public void addRow() {
 	  for(int i = 0; i < 2; i++) {
 		  JTextField empty = new JTextField("");
+		  empty.addKeyListener(new MyKeyListener(this));
 		  table.add(empty,(rows*2));
 		  boxes.add((rows-1)*2,empty);
 		  if(i != 0) {
@@ -391,13 +392,16 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(!table.isVisible() && !frame.isVisible()) {
 		  frame.getContentPane().removeAll();
 		  pass.setText("");
-		  frame.setTitle("Enter PIN");
 		  JLabel title = new JLabel("      Enter PIN");
 		  title.setHorizontalTextPosition(SwingConstants.CENTER);
 		  enterButton.addMouseListener(this);
-		  frame.setLayout(new FormLayout("40px,115px,40px","fill:pref:grow,fill:pref:grow,fill:pref:grow"));
+		  frame.setLayout(new FormLayout("10px,115px,10px","fill:pref:grow,fill:pref:grow,fill:pref:grow,10px"));
 		  CellConstraints cc = new CellConstraints();
-		  frame.setSize(new Dimension(195,100));
+		  
+		  frame.setSize(new Dimension(135,100));
+		  frame.setMaximumSize(new Dimension(135,100));
+		  frame.setMinimumSize(new Dimension(135,100));
+		  
 		  title.setPreferredSize(new Dimension(100,20));
 		  frame.add(title, cc.xy(2,1));
 		  frame.add(pass, cc.xy(2,2));
@@ -413,7 +417,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			  frame.removeKeyListener(frame.getKeyListeners()[0]);
 			  enterButton.removeKeyListener(enterButton.getKeyListeners()[0]);
 			  pass.removeKeyListener(pass.getKeyListeners()[0]);
-			  pass.removeKeyListener(pass.getKeyListeners()[0]);
+			  if(pass.getKeyListeners().length > 0) {
+				  pass.removeKeyListener(pass.getKeyListeners()[0]);
+			  }
 		  }
 		  		  
 		  frame.addKeyListener(new MyKeyListener(this));
