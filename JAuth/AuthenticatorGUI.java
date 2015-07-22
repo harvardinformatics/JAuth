@@ -140,7 +140,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
   
   public void setPassword() {
-	  FormLayout layout = new FormLayout("fill:pref:grow,150px","fill:pref:grow,fill:pref:grow,fill:pref:grow");
+	  FormLayout layout = new FormLayout("fill:pref:grow,60px","fill:pref:grow,fill:pref:grow,fill:pref:grow");
 	  firstFrame.setLayout(layout);
 	  JLabel title = new JLabel("  Create PIN to edit secrets");
 	  CellConstraints cc = new CellConstraints();
@@ -152,10 +152,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  ImageIcon icon;
 	  JLabel logo = new JLabel();
 	  try{
-		  icon = new ImageIcon("logo/logo48.png");
+		  icon = new ImageIcon(getClass().getResource("logo/logo48.png"));
 		  logo.setIcon(icon);
 		  firstFrame.add(logo, cc.xywh(2,1,1,3));
-		  System.out.println(logo.getGraphics());
 	  } catch(Exception e) {
 		  e.printStackTrace();
 	  }
@@ -167,9 +166,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       int y = (0);
       firstFrame.setLocation(x-230,y);
       
-      firstFrame.setSize(250,100);
-      firstFrame.setMaximumSize(new Dimension(250,100));
-      firstFrame.setMinimumSize(new Dimension(250,100));
+      firstFrame.setSize(220,100);
+      firstFrame.setMaximumSize(new Dimension(220,100));
+      firstFrame.setMinimumSize(new Dimension(220,100));
       firstFrame.setAlwaysOnTop(true);
       firstFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
       
