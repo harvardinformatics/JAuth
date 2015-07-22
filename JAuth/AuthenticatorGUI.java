@@ -654,10 +654,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     	save();
     	table.dispose();
     } else if (evt.getSource() == enterButton2) {
-    	password = newPass.getText();
-    	firstFrame.dispose();
-    	this.setVisible(true);
-    	edit();
+    	if(!newPass.getText().equals("") && !newPass.getText().equals(" ")) {
+				password = newPass.getText();
+				firstFrame.dispose();
+				this.setVisible(true);
+				edit();
+    	}
     } else if (evt.getSource() == minusButton) {
     	deleteRow();
     }
