@@ -58,6 +58,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public JLabel 		   nextButton    = new JLabel(">");
  
   public Image             image;
+  public Image			   icon; 
 
   public InputStream       fontStream;
 
@@ -140,14 +141,14 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
   
   public void setPassword() {
-	  FormLayout layout = new FormLayout("fill:pref:grow,48px","fill:pref:grow,fill:pref:grow");
+	  FormLayout layout = new FormLayout("10px,fill:pref:grow,5px,48px,10px","fill:pref:grow,fill:pref:grow,10px");
 	  firstFrame.setLayout(layout);
-	  firstFrame.setTitle("Create PIN for secrets");
-	  //JLabel title = new JLabel("  Create PIN to edit secrets");
+	  //firstFrame.setTitle("Create PIN for secrets");
+	  JLabel title = new JLabel("Create PIN for secrets");
 	  CellConstraints cc = new CellConstraints();
-	  //firstFrame.add(title, cc.xy(1,1));
-	  firstFrame.add(newPass, cc.xy(1,1));
-	  firstFrame.add(enterButton2, cc.xy(1,2));
+	  firstFrame.add(title, cc.xy(2,1));
+	  firstFrame.add(newPass, cc.xy(2,2));
+	  //firstFrame.add(enterButton2, cc.xy(1,3));
 	  enterButton2.addMouseListener(this);
 	  
 	  ImageIcon icon;
@@ -155,7 +156,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  try{
 		  icon = new ImageIcon(getClass().getResource("logo/logo48.png"));
 		  logo.setIcon(icon);
-		  firstFrame.add(logo, cc.xywh(2,1,1,2));
+		  firstFrame.add(logo, cc.xywh(4,1,1,3));
 	  } catch(Exception e) {
 		  e.printStackTrace();
 	  }
@@ -167,15 +168,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       int y = ((dim.height-h)/2-20);
       firstFrame.setLocation(x,y);
       
-      firstFrame.setSize(220,70);
-      firstFrame.setMaximumSize(new Dimension(220,70));
-      firstFrame.setMinimumSize(new Dimension(220,70));
+      firstFrame.setSize(205,80);
+      firstFrame.setMaximumSize(new Dimension(205,80));
+      firstFrame.setMinimumSize(new Dimension(205,80));
       firstFrame.setAlwaysOnTop(true);
       firstFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
       
       firstFrame.addKeyListener(new MyKeyListener(this));
       enterButton2.addKeyListener(new MyKeyListener(this));
-      //title.addKeyListener(new MyKeyListener(this));
+      title.addKeyListener(new MyKeyListener(this));
       newPass.addKeyListener(new MyKeyListener(this));
             
 	  firstFrame.setVisible(true);
@@ -211,7 +212,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  JTextField secret = new JTextField(secrets.get(i));
 		  name.addKeyListener(new MyKeyListener(this));
 		  secret.addKeyListener(new MyKeyListener(this));
-		  if(!name.getText().equals("")) {
+		  if(!name.getText().trim().equals("")) {
 			  table.add(name);
 			  table.add(secret);
 			  boxes.add(i*2,name);
@@ -228,7 +229,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  while(boxes.size() > (rows-1)*2){
 		  boxes.remove(boxes.size()-1);
 	  }
-		
 		  
 	  JPanel bottom = new JPanel();
 	  bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -959,7 +959,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		e.printStackTrace();
 	}
   }
- public static void main(String[] args) {
+  
+  public static void main(String[] args) {
 	 try{
 		 UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 	 } catch(Exception e) {
