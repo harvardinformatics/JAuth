@@ -260,11 +260,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       else {
     	  
       }
-      table.setSize(320,50*(rows+1));
       table.setMaximumSize(new Dimension(320,50*(rows+1)));
       table.setMinimumSize(new Dimension(320,50*(rows+1)));
+      table.setPreferredSize(new Dimension(320,50*(rows+1)));
+      table.setSize(320,50*(rows+1));
       table.setLocation(x,y);
-	  table.setVisible(true);  
+	  table.setVisible(true); 
 	  
   } 
   public void addRow() {
@@ -283,11 +284,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(rows == 1) {
 	      table.setMaximumSize(new Dimension(320,90));
 	      table.setMinimumSize(new Dimension(320,90));
+	      table.setPreferredSize(new Dimension(320,50*(rows+1)));
     	  table.setSize(320,90);
       }
       else {
           table.setMaximumSize(new Dimension(320,50*(rows+1)));
           table.setMinimumSize(new Dimension(320,50*(rows+1)));
+          table.setPreferredSize(new Dimension(320,50*(rows+1)));
     	  table.setSize(320,50*(rows+1));
       }
 	  table.repaint();
@@ -311,10 +314,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  if (rows == 1) {
 			  table.setMaximumSize(new Dimension(320, 90));
 			  table.setMinimumSize(new Dimension(320, 90));
+		      table.setPreferredSize(new Dimension(320,90));
 			  table.setSize(320, 90);
 		  } else {
 			  table.setMaximumSize(new Dimension(320, 50 * (rows + 1)));
 			  table.setMinimumSize(new Dimension(320, 50 * (rows + 1)));
+		      table.setPreferredSize(new Dimension(320,50*(rows+1)));
 			  table.setSize(320, 50 * (rows + 1));
 		  }
 	  }
