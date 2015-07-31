@@ -27,9 +27,9 @@ public class MyKeyListener implements KeyListener{
 					aGui.edit();
 	    	}
 			}
-			else if(aGui.table.isVisible()) {
+			else if(aGui.editWindow.isVisible()) {
 				aGui.save();
-			    aGui.table.dispose();
+			    aGui.editWindow.dispose();
 			}
 			else if(aGui.frame.isVisible()) {
 				  String passTry = aGui.pass.getText();

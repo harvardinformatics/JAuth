@@ -50,12 +50,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   public JButton		   addButton	 = new JButton("+");
   public JButton 		   minusButton   = new JButton("-");
   public JButton 		   saveButton	 = new JButton("Save");
-  public JFrame			   table		 = new JFrame("Add Providers & Secrets");
+  public JPanel			   table		 = new JPanel();
   public JPasswordField	   newPass 		 = new JPasswordField(4);
   public JButton		   enterButton2  = new JButton("Enter");
   public JFrame 		   firstFrame	 = new JFrame();
-  public ArrayList<JTextField> boxes 		 = new ArrayList(0);
+  public ArrayList<JTextField> boxes 	 = new ArrayList(0);
+  public ArrayList<JButton>	buttons 	 = new ArrayList(0);
   public JLabel 		   nextButton    = new JLabel(">");
+  public JFrame 		   editWindow 	 = new JFrame();
+
  
   public Image             image;
   public Image			   icon; 
@@ -183,11 +186,41 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  firstFrame.requestFocus();
   }
   
+  public void tableBuilder(int rows) {
+	  String gridRows = "";
+	  int j = buttons.size();
+	  for(int i = 0; i < j; i++) {
+		  editWindow.remove(buttons.remove(0));
+	  }
+	  for(int i = 0; i < rows; i ++) {
+		  gridRows += "50px,";
+	  }
+	  gridRows += "50px,50px";
+	  FormLayout fLayout = new FormLayout("10px,320px,45px",gridRows);
+	  editWindow.setLayout(fLayout);
+	  
+	  CellConstraints cc = new CellConstraints();
+	  editWindow.add(table, cc.xywh(2,1,1,rows+1));
+	  
+      for(int i = 1; i < rows; i++) {
+    	  JButton xButton = new JButton("x");
+    	  xButton.addKeyListener(new MyKeyListener(this));
+    	  xButton.addMouseListener(this);
+    	  buttons.add(xButton);
+    	  editWindow.add(xButton, cc.xy(3, i+1));
+      }
+	  
+      editWindow.setMaximumSize(new Dimension(380,50*(rows+1)+30));
+      editWindow.setMinimumSize(new Dimension(380,50*(rows+1)+30));
+      editWindow.setPreferredSize(new Dimension(380,50*(rows+1)+30));
+      editWindow.setSize(380,50*(rows+1)+30);
+  }
   public void edit() {
 	  rows = providers.size() +1;
 	  GridLayout layout = new GridLayout(0,2);
 	  
-	  table.getContentPane().removeAll(); //reset table 
+	  table.removeAll();
+	  editWindow.getContentPane().removeAll(); //reset window 
 	  saveButton.removeMouseListener(this);
 	  addButton.removeMouseListener(this);
 	  minusButton.removeMouseListener(this);
@@ -199,6 +232,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  }
 	  
 	  table.setLayout(layout);
+
 	  
 	  JLabel providerLabel = new JLabel("             Providers");
 	  JLabel secretLabel = new JLabel("             Secrets");
@@ -212,6 +246,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  JTextField secret = new JTextField(secrets.get(i));
 		  name.addKeyListener(new MyKeyListener(this));
 		  secret.addKeyListener(new MyKeyListener(this));
+		  name.setSize(160, 50);
+		  secret.setSize(160,50);
 		  if(!name.getText().trim().equals("")) {
 			  table.add(name);
 			  table.add(secret);
@@ -229,7 +265,26 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  while(boxes.size() > (rows-1)*2){
 		  boxes.remove(boxes.size()-1);
 	  }
-		  
+	  
+	  tableBuilder(rows);
+
+	  if(boxes.size() == 0) {
+		  DefaultStyledDocument doc = new DefaultStyledDocument();
+	      doc.setDocumentFilter(new DocumentSizeFilter(23));
+		  JTextField name = new JTextField();
+		  JTextField secret = new JTextField();
+		  name.addKeyListener(new MyKeyListener(this));
+		  secret.addKeyListener(new MyKeyListener(this));
+		  name.setSize(160, 50);
+		  secret.setSize(160,50);
+		  name.setDocument(doc);
+		  table.add(name);
+		  table.add(secret);
+		  boxes.add(0,name);
+		  boxes.add(1,secret);
+		  tableBuilder(2);
+	  }
+	  		  
 	  JPanel bottom = new JPanel();
 	  bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 	  
@@ -254,18 +309,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       int x = (dim.width-w)/2;
       int y = (dim.height-h)/2;
       
-      if(rows == 1) {
-    	  table.setSize(320,90);
-      }
-      else {
-    	  
-      }
-      table.setMaximumSize(new Dimension(320,50*(rows+1)));
-      table.setMinimumSize(new Dimension(320,50*(rows+1)));
-      table.setPreferredSize(new Dimension(320,50*(rows+1)));
-      table.setSize(320,50*(rows+1));
-      table.setLocation(x,y);
-	  table.setVisible(true); 
+      
+      editWindow.setLocation(x,y);
+	  editWindow.setVisible(true); 
 	  
   } 
   public void addRow() {
@@ -281,19 +327,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  }
 	  }
 	  rows++;
-	  if(rows == 1) {
-	      table.setMaximumSize(new Dimension(320,90));
-	      table.setMinimumSize(new Dimension(320,90));
-	      table.setPreferredSize(new Dimension(320,50*(rows+1)));
-    	  table.setSize(320,90);
-      }
-      else {
-          table.setMaximumSize(new Dimension(320,50*(rows+1)));
-          table.setMinimumSize(new Dimension(320,50*(rows+1)));
-          table.setPreferredSize(new Dimension(320,50*(rows+1)));
-    	  table.setSize(320,50*(rows+1));
-      }
-	  table.repaint();
+	  tableBuilder(rows);
+	  editWindow.repaint();
   }
   public void deleteRow() {
 	  if(rows != 1)
@@ -311,17 +346,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 				table.remove(boxes.remove(boxes.size() - 1));
 				rows--;
 		  }
-		  if (rows == 1) {
-			  table.setMaximumSize(new Dimension(320, 90));
-			  table.setMinimumSize(new Dimension(320, 90));
-		      table.setPreferredSize(new Dimension(320,90));
-			  table.setSize(320, 90);
-		  } else {
-			  table.setMaximumSize(new Dimension(320, 50 * (rows + 1)));
-			  table.setMinimumSize(new Dimension(320, 50 * (rows + 1)));
-		      table.setPreferredSize(new Dimension(320,50*(rows+1)));
-			  table.setSize(320, 50 * (rows + 1));
-		  }
+		  editWindow.setSize(350, 50 * (rows + 1)+10);
 	  }
 	  while(providers.size() > rows-1 && secrets.size() > rows-1) {
 	      providers.remove(providers.size()-1);
@@ -331,6 +356,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(placeInList > providers.size()) {
 		  placeInList = 0;
 	  }
+	  tableBuilder(rows);
 	  placeInBoxes = -1;
   }
   public void save() {
@@ -395,7 +421,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   //opens a window to enter password 
   public void editPasswordCheck() {
 
-	  if(!table.isVisible() && !frame.isVisible()) {
+	  if(!editWindow.isVisible() && !frame.isVisible()) {
 		  frame.getContentPane().removeAll();
 		  pass.setText("");
 		  JLabel title = new JLabel("      Enter PIN");
@@ -610,14 +636,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   }
   public void mouseDragged(MouseEvent evt) { }
   public void mousePressed(MouseEvent evt) { 
-	  if(table.isVisible()) {
-	    	Component c = table.getFocusOwner();
-	    	for(int i = 0; i < boxes.size(); i++) {
-	    		if(c != null && c.equals(boxes.get(i))) {
-	    			placeInBoxes = i;
-	    		}
-	    	}
-	    }
     
 	    // Copies the code to the clipboard when the copy label is clicked  
 	if (evt.getSource() == copyLabel) {
@@ -663,7 +681,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     	addRow();
     } else if (evt.getSource() == saveButton) {
     	save();
-    	table.dispose();
+    	editWindow.dispose();
     } else if (evt.getSource() == enterButton2) {
     	if(!newPass.getText().equals("") && !newPass.getText().equals(" ")) {
 				password = newPass.getText();
@@ -673,6 +691,13 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     	}
     } else if (evt.getSource() == minusButton) {
     	deleteRow();
+    } else { 
+			for (int i = 0; i < rows-1; i++) {
+				if (buttons.get(i) != null && evt.getSource() == buttons.get(i)) {
+					placeInBoxes = i*2;
+					deleteRow();
+				}
+			}
     }
   }      
   public void mouseMoved  (MouseEvent evt) { }
@@ -689,26 +714,26 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       System.out.println("Thread interrupted");
     }
   }
-  public void keyPressed(KeyEvent evt) {
-	  System.out.println("Hello");
-	  if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-		  if(firstFrame.isActive()) {
-			  password = newPass.getText();
-		    	firstFrame.dispose();
-		    	this.setVisible(true); 
-		  } else if(frame.isActive()) {
-			  String passTry = pass.getText();
-		    	if(passTry.equals(password)) {
-		    		checkPass = true;
-					frame.dispose();
-					edit();
-		    	}  
-		  } else if(table.isActive()) {
-			  save();
-		      table.dispose();
-		  }
-	  }
-  }
+//  public void keyPressed(KeyEvent evt) {
+//	  System.out.println("Hello");
+//	  if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//		  if(firstFrame.isActive()) {
+//			  password = newPass.getText();
+//		    	firstFrame.dispose();
+//		    	this.setVisible(true); 
+//		  } else if(frame.isActive()) {
+//			  String passTry = pass.getText();
+//		    	if(passTry.equals(password)) {
+//		    		checkPass = true;
+//					frame.dispose();
+//					edit();
+//		    	}  
+//		  } else if(editWindow.isActive()) {
+//			  save();
+//			  editWindow.dispose();
+//		  }
+//	  }
+//  }
 
   public String getNewCode() {
     if(!secret.trim().equals("")) {
