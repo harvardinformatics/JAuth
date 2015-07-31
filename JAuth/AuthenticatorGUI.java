@@ -186,7 +186,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  firstFrame.requestFocus();
   }
   
-  public void tableBuilder(int rows) {
+  public void tableBuilder() {
 	  String gridRows = "";
 	  int j = buttons.size();
 	  for(int i = 0; i < j; i++) {
@@ -266,23 +266,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  boxes.remove(boxes.size()-1);
 	  }
 	  
-	  tableBuilder(rows);
+	  tableBuilder();
 
 	  if(boxes.size() == 0) {
-		  DefaultStyledDocument doc = new DefaultStyledDocument();
-	      doc.setDocumentFilter(new DocumentSizeFilter(23));
-		  JTextField name = new JTextField();
-		  JTextField secret = new JTextField();
-		  name.addKeyListener(new MyKeyListener(this));
-		  secret.addKeyListener(new MyKeyListener(this));
-		  name.setSize(160, 50);
-		  secret.setSize(160,50);
-		  name.setDocument(doc);
-		  table.add(name);
-		  table.add(secret);
-		  boxes.add(0,name);
-		  boxes.add(1,secret);
-		  tableBuilder(2);
+		  addRow();
 	  }
 	  		  
 	  JPanel bottom = new JPanel();
@@ -327,7 +314,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		  }
 	  }
 	  rows++;
-	  tableBuilder(rows);
+	  tableBuilder();
 	  editWindow.repaint();
   }
   public void deleteRow() {
@@ -356,7 +343,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(placeInList > providers.size()) {
 		  placeInList = 0;
 	  }
-	  tableBuilder(rows);
+	  tableBuilder();
 	  placeInBoxes = -1;
   }
   public void save() {
