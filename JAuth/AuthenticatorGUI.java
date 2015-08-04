@@ -216,6 +216,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       editWindow.setSize(380,50*(rows+1)+30);
   }
   public void edit() {
+	  	  
 	  rows = providers.size() +1;
 	  GridLayout layout = new GridLayout(0,2);
 	  
@@ -937,7 +938,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
           desCipher.init(Cipher.ENCRYPT_MODE, desKey, new IvParameterSpec(iv));
           byte[] textEncrypted = desCipher.doFinal(text);
           
-          FileOutputStream fos = new FileOutputStream("JAuth_Save");
+          String home = System.getProperty("user.home");
+          FileOutputStream fos = new FileOutputStream(home + "/JAuth_Save");
           for(int i = 0; i < textEncrypted.length; i++) {
         	  fos.write(textEncrypted[i]);
           }
@@ -949,7 +951,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   private void saveDecrypt() {
 	try {
 		
-		FileInputStream fis = new FileInputStream("JAuth_Save");
+		String home = System.getProperty("user.home");
+		FileInputStream fis = new FileInputStream(home + "/JAuth_Save");
 		byte[] s = new byte[fis.available()];
 		for(int i = 0; i < s.length; i++) {
 			s[i] = (byte) fis.read();
