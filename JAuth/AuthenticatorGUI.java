@@ -1023,6 +1023,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	app.setDockIconImage(icon);
 	app.setAboutHandler(new JAuthAboutHandler(icon));
 	}*/
+    	
       Dimension          dim  = Toolkit.getDefaultToolkit().getScreenSize();
       AuthenticatorGUI gui  = new AuthenticatorGUI(image,font);
       AuthenticatorFrame jf   = new AuthenticatorFrame();
