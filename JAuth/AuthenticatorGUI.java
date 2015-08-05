@@ -329,6 +329,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 				  table.remove(boxes.remove(placeInBoxes-1));
 			  }
 			  rows--;
+			  saveButton.requestFocus();
 		  } else {
 				table.remove(boxes.remove(boxes.size() - 1));
 				table.remove(boxes.remove(boxes.size() - 1));
