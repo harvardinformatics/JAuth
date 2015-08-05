@@ -322,12 +322,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  if(rows != 1)
 	  {
 		  if(placeInBoxes != -1) {
-			  table.remove(boxes.remove(placeInBoxes));
-			  if(placeInBoxes%2 != 1 || placeInBoxes == 0){
-				  table.remove(boxes.remove(placeInBoxes));
-			  } else {
-				  table.remove(boxes.remove(placeInBoxes-1));
-			  }
+			  table.remove(placeInBoxes+2);
+			  boxes.remove(placeInBoxes);
+			  boxes.remove(placeInBoxes);
+			  table.remove(placeInBoxes+2);
 			  rows--;
 			  saveButton.requestFocus();
 		  } else {
@@ -335,7 +333,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 				table.remove(boxes.remove(boxes.size() - 1));
 				rows--;
 		  }
-		  editWindow.setSize(350, 50 * (rows + 1)+10);
 	  }
 	  while(providers.size() > rows-1 && secrets.size() > rows-1) {
 	      providers.remove(providers.size()-1);
