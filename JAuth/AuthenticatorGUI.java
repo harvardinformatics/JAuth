@@ -476,7 +476,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  }
 	  for(int i = 1; i < lines.size(); i++) {
 		  providers.add(lines.get(i).substring(0, lines.get(i).indexOf("*")));
-		  System.out.println(providers.get(i-1));
 		  secrets.add(lines.get(i).substring(lines.get(i).indexOf("*")+1));
 	  }
 	  if(providers.size() == 0) {
