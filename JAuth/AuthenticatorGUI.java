@@ -357,16 +357,16 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 					 providers.add(boxes.get(i).getText());
 				 }
 			 } else {
-				 if(boxes.get(i).getText().equals(null)) {
+				 if(boxes.size() != 0 && boxes.get(i).getText() == (null)) {
 					 providers.set(i/2,"");
-				 } else {
+				 } else if(boxes.size() != 0){
 					 providers.set(i/2,boxes.get(i).getText());
 				 }
 			 }
 		 }
 		 if(secrets.size() <= i/2) {
 			 secrets.add(boxes.get(i).getText());
-		 } else {
+		 } else if (boxes.size() > 0){
 			 secrets.set(i/2, boxes.get(i).getText());
 		 }
 	 }
@@ -374,8 +374,10 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		 if(providers.get(i).trim().equals("")) {
 			 providers.remove(i);
 			 secrets.remove(i);
-			 boxes.remove(i*2);
-			 boxes.remove(i*2);
+			 if(boxes.size() > 0) {
+				 boxes.remove(i*2);
+				 boxes.remove(i*2);
+			 }
 			 rows--;
 		 }
 	 }
@@ -474,6 +476,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  }
 	  for(int i = 1; i < lines.size(); i++) {
 		  providers.add(lines.get(i).substring(0, lines.get(i).indexOf("*")));
+		  System.out.println(providers.get(i-1));
 		  secrets.add(lines.get(i).substring(lines.get(i).indexOf("*")+1));
 	  }
 	  if(providers.size() == 0) {
@@ -679,7 +682,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
     	}
     } else if (evt.getSource() == minusButton) {
     	deleteRow();
-    } else { 
+    } else if (editWindow.isVisible()){ 
 			for (int i = 0; i < rows-1; i++) {
 				if (buttons.get(i) != null && evt.getSource() == buttons.get(i)) {
 					placeInBoxes = i*2;
