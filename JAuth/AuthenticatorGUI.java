@@ -708,26 +708,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
       System.out.println("Thread interrupted");
     }
   }
-//  public void keyPressed(KeyEvent evt) {
-//	  System.out.println("Hello");
-//	  if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//		  if(firstFrame.isActive()) {
-//			  password = newPass.getText();
-//		    	firstFrame.dispose();
-//		    	this.setVisible(true); 
-//		  } else if(frame.isActive()) {
-//			  String passTry = pass.getText();
-//		    	if(passTry.equals(password)) {
-//		    		checkPass = true;
-//					frame.dispose();
-//					edit();
-//		    	}  
-//		  } else if(editWindow.isActive()) {
-//			  save();
-//			  editWindow.dispose();
-//		  }
-//	  }
-//  }
+
 
   public String getNewCode() {
     if(!secret.trim().equals("")) {
@@ -982,7 +963,23 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
         
 	}
 	catch(Exception e) {
-		e.printStackTrace();
+		try{
+		String ksFile = "JAuth_KS";
+		KeyStore keyStore = createKeyStore(ksFile, "javaci123");
+		KeyStore.Entry entry = keyStore.getEntry(keyStore.aliases().nextElement(), keyPassword);
+	    SecretKey myDesKey = ((KeyStore.SecretKeyEntry) entry).getSecretKey();
+
+        Cipher desCipher;
+        desCipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        
+        desCipher.init(Cipher.DECRYPT_MODE, myDesKey, new IvParameterSpec(iv));
+
+        String toSave = new String("0+");
+        arrayFill(toSave);
+		}
+		catch(Exception d) {
+			d.printStackTrace();
+		}
 	}
   }
   
