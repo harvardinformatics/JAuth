@@ -104,7 +104,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			setSecret(secrets.get(placeInList));
 			if (password == null) {
 				setPassword();
-				this.setVisible(false);
 			}
 			this.font = font;
 			this.image = image;
