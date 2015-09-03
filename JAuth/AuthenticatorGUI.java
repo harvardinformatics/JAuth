@@ -97,6 +97,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	  secrets.add("DUMMY-SECRET");
 	  saveEncrypt();
   }
+  
   public AuthenticatorGUI(Image image,Font font) {
 		try {
 			saveDecrypt();
@@ -963,23 +964,28 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
         
 	}
 	catch(Exception e) {
-		try{
-		String ksFile = "JAuth_KS";
-		KeyStore keyStore = createKeyStore(ksFile, "javaci123");
-		KeyStore.Entry entry = keyStore.getEntry(keyStore.aliases().nextElement(), keyPassword);
-	    SecretKey myDesKey = ((KeyStore.SecretKeyEntry) entry).getSecretKey();
-
-        Cipher desCipher;
-        desCipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
-        
-        desCipher.init(Cipher.DECRYPT_MODE, myDesKey, new IvParameterSpec(iv));
-
-        String toSave = new String("0+");
-        arrayFill(toSave);
-		}
-		catch(Exception d) {
-			d.printStackTrace();
-		}
+//		try{
+//		String ksFile = "JAuth_KS";
+//		KeyStore keyStore = createKeyStore(ksFile, "javaci123");
+//		KeyStore.Entry entry = keyStore.getEntry(keyStore.aliases().nextElement(), keyPassword);
+//	    SecretKey myDesKey = ((KeyStore.SecretKeyEntry) entry).getSecretKey();
+//
+//        Cipher desCipher;
+//        desCipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+//        
+//        desCipher.init(Cipher.DECRYPT_MODE, myDesKey, new IvParameterSpec(iv));
+//
+//        String toSave = new String("0+");
+//        arrayFill(toSave);
+//		}
+//		catch(Exception d) {
+//			d.printStackTrace();
+//		}
+		rows = 2;
+		password = null;
+		providers.add("RCFAS");
+		secrets.add("DUMMY-SECRET");
+		saveEncrypt();
 	}
   }
   
