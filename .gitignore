@@ -1,0 +1,3 @@
+*.class
+.DS_Store
+Installers/output.txt

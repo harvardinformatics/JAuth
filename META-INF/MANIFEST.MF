@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.5
+Created-By: 1.6.0_01-b06 (Sun Microsystems Inc.)
+Built-By: Karsten
+Specification-Title: JGoodies Forms API Specification
+Specification-Vendor: JGoodies Karsten Lentzsch
+Specification-Version: 1.1
+Implementation-Title: JGoodies Forms
+Implementation-Vendor: JGoodies Karsten Lentzsch
+Implementation-Version: 1.1.0 2007-04-18 10:45:38
+
