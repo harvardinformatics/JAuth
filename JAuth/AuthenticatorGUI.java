@@ -102,7 +102,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		try {
 			saveDecrypt();
 			setSecret(secrets.get(placeInList));
-			if (password == null) {
+			if (password == "") {
 				setPassword();
 			}
 			this.font = font;
@@ -981,7 +981,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 //			d.printStackTrace();
 //		}
 		rows = 2;
-		password = null;
+		password = "";
 		providers.add("RCFAS");
 		secrets.add("DUMMY-SECRET");
 		saveEncrypt();
