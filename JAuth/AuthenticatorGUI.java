@@ -112,14 +112,21 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			e.printStackTrace();
 		}
 
-		this.setSecret(secrets.get(placeInList));
-		if (providers.size() != 0 || !providers.get(placeInList).trim().equals("")) {
-			nameButton.setText("  " + providers.get(placeInList)); // update provider
+		if(!secrets.get(placeInList).equals("DUMMY-SECRET")) {
+			this.setSecret(secrets.get(placeInList));
+			if (providers.size() != 0 || !providers.get(placeInList).trim().equals("")) {
+				nameButton.setText("  " + providers.get(placeInList)); // update
+																		// provider
+			} else {
+				nameButton.setText("  Edit Secrets");
+			} // displays current provider
+			if (nameButton.getText().trim().equals("")) {
+				nameButton.setText("Edit Secrets");
+			}
 		} else {
 			nameButton.setText("  Edit Secrets");
-		} // displays current provider
-		if (nameButton.getText().trim().equals("")) {
-			nameButton.setText("Edit Secrets");
+			codeField.setText("--- ---");
+			this.setSecret("");
 		}
 		componentInit();
 	}
@@ -392,19 +399,25 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
   			placeInList = 0;
   		}
   	}
-  	if(providers.size() == 0 || providers.get(placeInList).trim().equals("")){  
-  		nameButton.setText("  Add Secrets");
-  	}
-  	else { 
-  		nameButton.setText("  " + providers.get(placeInList)); //update provider
-  	}
-  	if(secrets.size() == 0 || secrets.get(placeInList).trim().equals("")) {
-  		this.setSecret("");
-  		codeField.setText("--- ---");
-  	}
-  	else {    		
-  		this.setSecret(secrets.get(placeInList)); //update secret respectively
-  	}
+	if(!secrets.get(placeInList).equals("DUMMY-SECRET")) {
+			if (providers.size() == 0 || providers.get(placeInList).trim().equals("")) {
+				nameButton.setText("  Add Secrets");
+			} else {
+				nameButton.setText("  " + providers.get(placeInList)); // update
+																		// provider
+			}
+			if (secrets.size() == 0 || secrets.get(placeInList).trim().equals("")) {
+				this.setSecret("");
+				codeField.setText("--- ---");
+			} else {
+				this.setSecret(secrets.get(placeInList)); // update secret
+															// respectively
+			}
+	} else { 
+		nameButton.setText("  Edit Secrets");
+		codeField.setText("--- ---");
+		this.setSecret("");
+	}
   }
   //opens a window to enter password 
   public void editPasswordCheck() {
