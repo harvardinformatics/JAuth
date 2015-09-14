@@ -14,68 +14,62 @@ import java.util.Set;
 
 import javax.swing.text.JTextComponent;
 
-public class MyKeyListener implements KeyListener{
+public class MyKeyListener implements KeyListener {
 	public AuthenticatorGUI aGui;
 	private final Set<Character> pressed = new HashSet<Character>();
-	
+
 	public MyKeyListener(AuthenticatorGUI aGui) {
 		this.aGui = aGui;
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		pressed.add(e.getKeyChar());
-		if(aGui.editWindow.isVisible()) {
-			if(pressed.contains('c') && pressed.contains('￿')){
-			    StringSelection ss = new StringSelection(((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
+		if (aGui.editWindow.isVisible()) {
+			if (pressed.contains('c') && pressed.contains('￿')) {
+				StringSelection ss = new StringSelection(
+						((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 			}
-			if(pressed.contains('c') && pressed.contains('￿')){
-			    StringSelection ss = new StringSelection(((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
+			if (pressed.contains('c') && pressed.contains('￿')) {
+				StringSelection ss = new StringSelection(
+						((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 			}
-			if(pressed.contains('v') && pressed.contains('￿')){
+			if (pressed.contains('v') && pressed.contains('￿')) {
 				try {
-					((JTextComponent) aGui.editWindow.getFocusOwner()).setText((String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-			if(pressed.contains('v') && pressed.contains('￿')){
-				try {
-					((JTextComponent) aGui.editWindow.getFocusOwner()).setText((String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
+					((JTextComponent) aGui.editWindow.getFocusOwner()).setText(
+							(String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
 		}
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if(aGui.firstFrame.isVisible()) {
-				if(!aGui.newPass.getText().equals("") && !aGui.newPass.getText().equals(" ")) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (aGui.firstFrame.isVisible()) {
+				if (!aGui.newPass.getText().equals("") && !aGui.newPass.getText().equals(" ")) {
 					aGui.password = aGui.newPass.getText();
 					aGui.firstFrame.dispose();
 					aGui.setVisible(true);
-					aGui.edit();
-	    	}
-			}
-			else if(aGui.editWindow.isVisible()) {
+					aGui.showEditWindow();
+				}
+			} else if (aGui.editWindow.isVisible()) {
 				aGui.save();
-			    aGui.editWindow.dispose();
-			}
-			else if(aGui.frame.isVisible()) {
-				  String passTry = aGui.pass.getText();
-				  if(passTry.equals(aGui.password)) {
-		    		aGui.checkPass = true;
+				aGui.editWindow.dispose();
+			} else if (aGui.frame.isVisible()) {
+				String passTry = aGui.pass.getText();
+				if (passTry.equals(aGui.password)) {
+					aGui.checkPass = true;
 					aGui.frame.dispose();
-					aGui.edit();
-		    	}  
-			} 
+					aGui.showEditWindow();
+				}
+			}
 		}
 	}
 
