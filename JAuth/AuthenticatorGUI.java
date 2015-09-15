@@ -23,7 +23,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
-public final class AuthenticatorGUI extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+public final class AuthenticatorGUI extends JPanel implements FocusListener, ActionListener, MouseListener, MouseMotionListener {
 
 	public JLabel codeField = new JLabel("--- ---");
 	public JLabel copyLabel = new JLabel(" Copy");
@@ -47,6 +47,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	public ArrayList<JPanel> providerSecretPanels	= new ArrayList<JPanel>(0);	
 	public JLabel nextButton = new JLabel(">");
 	public JFrame editWindow = new JFrame();
+	
+	public Color noFocusBackgroundColor;
+	public Color focusBackgroundColor;
 
 	public Image image;
 	public Image icon;
@@ -66,6 +69,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	
 	//The number of empty rows to display in the edit table
 	public int extraTableRows			= 0;
+	
+	//The edit window panel that has the current focus
+	public JPanel selectedPanel;
 	
 	public int placeInList 				= 0;
 	public int placeInBoxes 				= -1;
@@ -204,22 +210,20 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		this.firstFrame.requestFocus();
 	}
 
-	public void tableBuilder() {
-//		GridLayout editWindowLayout = new GridLayout(1,1);
-//		editWindow.setLayout(editWindowLayout);
-//		editWindow.add(this.table);
-//
-//		int rows = this.providerSecrets.size() + this.extraTableRows;
-//		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
-//		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
-//		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
-//		editWindow.setSize(380, 50 * (rows + 1) + 30);
+	/*
+	 * Sets the edit window size based on the number of 
+	 * rows (usually this.extraTableRows + this.providerSecrets.size())
+	 */
+	public void resizeEditWindow(int rows){
+		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setSize(380, 50 * (rows + 1) + 30);		
 	}
-
-	public void showEditWindow(){
-		this.edit();
-	}
-	public void edit() {
+	/*
+	 * Renders the edit window
+	 */
+	public void showEditWindow() {
 
 		rows = this.providerSecrets.size() + 1;
 		//this.rows = this.providerSecrets.size() + 1;
@@ -259,9 +263,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			doc.setDocumentFilter(new DocumentSizeFilter(23));
 			
 			JTextField providerField = new JTextField();
-			JTextField secretField   = new JTextField();
 			providerField.addKeyListener(new MyKeyListener(this));
+			providerField.addFocusListener(this);
+			
+			JTextField secretField   = new JTextField();
 			secretField.addKeyListener(new MyKeyListener(this));
+			secretField.addFocusListener(this);
 			
 			if (!provider.trim().equals("")) {
 				this.boxes.add(i * 2, providerField);
@@ -302,10 +309,12 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		for (int j = 0; j < this.extraTableRows; j++){
 			JTextField emptyProviderField = new JTextField();
 			emptyProviderField.addKeyListener(new MyKeyListener(this));
+			emptyProviderField.addFocusListener(this);
 			emptyProviderField.getDocument().putProperty(Document.TitleProperty, "provider");
 			
 			JTextField emptySecretField = new JTextField();
 			emptySecretField.addKeyListener(new MyKeyListener(this));
+			emptySecretField.addFocusListener(this);
 			emptySecretField.getDocument().putProperty(Document.TitleProperty, "secret");
 			
 			JPanel emptyPanel = new JPanel();
@@ -322,10 +331,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		editWindow.add(this.table);
 
 		int rows = this.providerSecrets.size() + this.extraTableRows;
-		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setSize(380, 50 * (rows + 1) + 30);
+		this.resizeEditWindow(rows);
 
 		
 		//Setup the button panel
@@ -345,6 +351,11 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		table.addKeyListener(new MyKeyListener(this));
 		minusButton.addKeyListener(new MyKeyListener(this));
 		addButton.addKeyListener(new MyKeyListener(this));
+		
+		//Prevent the removal of all boxes
+		if (this.extraTableRows + this.providerSecrets.size() < 2){
+			this.minusButton.setEnabled(false);
+		}
 
 			
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -358,57 +369,84 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
 	}
 	
+	/**
+	 * Increments the extraTableRows value and 
+	 * calls showEditWindow
+	 */
 	public void addRow() {
 		this.extraTableRows++;
 		this.showEditWindow();
 	}
 
-//	public void addRow() {
-//		for (int i = 0; i < 2; i++) {
-//			JTextField empty = new JTextField("");
-//			empty.addKeyListener(new MyKeyListener(this));
-//			table.add(empty, (rows * 2));
-//			boxes.add((rows - 1) * 2, empty);
-//			if (i != 0) {
-//				DefaultStyledDocument doc = new DefaultStyledDocument();
-//				doc.setDocumentFilter(new DocumentSizeFilter(23));
-//				empty.setDocument(doc);
-//			}
-//		}
-//		rows++;
-//		tableBuilder();
-//		editWindow.repaint();
-//	}
-
+	/*
+	 * Remove the selected panel, and, if it has a provider / secret
+	 * remove those from the list
+	 */
+	public void deleteRow(){
+		//Don't delete if there is no selected panel
+		if (this.selectedPanel == null){
+			return;
+		}
+		
+		//Don't delete if there is only one row left
+		if (this.extraTableRows + this.providerSecrets.size() == 1){
+			return;
+		}
+		
+		// Remove the provider / secret
+		// by looking for the provider titled JTextField
+		// If a valid provider is not found, the extra rows is decremented
+		boolean isEmpty = true;
+		for (Component c : this.selectedPanel.getComponents()){
+			if (c instanceof JTextField){
+				JTextField textField = (JTextField)c;
+				if (textField.getDocument().getProperty(Document.TitleProperty).equals("provider")){
+					String provider = textField.getText().trim();
+					if (!provider.equals("") && this.providerSecrets.containsKey(provider)){
+						this.providerSecrets.remove(provider);
+						isEmpty = false;
+					}
+				}
+			}
+		}
+		
+		if (isEmpty){
+			this.extraTableRows--;
+		}
+		
+		this.table.remove(this.selectedPanel);
+		this.resizeEditWindow(this.extraTableRows + this.providerSecrets.size());
+		this.editWindow.repaint();
+		this.selectedPanel = null;
+	}
 	/*
 	 * Remove a row from the editWindow
 	 */
-	public void deleteRow() {
-		if (rows != 1) {
-			if (placeInBoxes != -1) {
-				table.remove(placeInBoxes + 2);
-				boxes.remove(placeInBoxes);
-				boxes.remove(placeInBoxes);
-				table.remove(placeInBoxes + 2);
-				rows--;
-				saveButton.requestFocus();
-			} else {
-				table.remove(boxes.remove(boxes.size() - 1));
-				table.remove(boxes.remove(boxes.size() - 1));
-				rows--;
-			}
-		}
-		while (providers.size() > rows - 1 && secrets.size() > rows - 1) {
-			providers.remove(providers.size() - 1);
-			secrets.remove(secrets.size() - 1);
-		}
-		table.repaint();
-		if (placeInList > providers.size()) {
-			placeInList = 0;
-		}
-		tableBuilder();
-		placeInBoxes = -1;
-	}
+//	public void deleteRow() {
+//		if (rows != 1) {
+//			if (placeInBoxes != -1) {
+//				table.remove(placeInBoxes + 2);
+//				boxes.remove(placeInBoxes);
+//				boxes.remove(placeInBoxes);
+//				table.remove(placeInBoxes + 2);
+//				rows--;
+//				saveButton.requestFocus();
+//			} else {
+//				table.remove(boxes.remove(boxes.size() - 1));
+//				table.remove(boxes.remove(boxes.size() - 1));
+//				rows--;
+//			}
+//		}
+//		while (providers.size() > rows - 1 && secrets.size() > rows - 1) {
+//			providers.remove(providers.size() - 1);
+//			secrets.remove(secrets.size() - 1);
+//		}
+//		table.repaint();
+//		if (placeInList > providers.size()) {
+//			placeInList = 0;
+//		}
+//		placeInBoxes = -1;
+//	}
 
 	/*
 	 * Iterates through the components in the providerSecretPanels and 
@@ -478,7 +516,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
 	/*
 	 * Increments the provider to the next one in the list and 
-	 * then updates the button and code field
+	 * then updates the button and code field when x = 1
+	 * Otherwise, just repaints the image
 	 */
 	public void updateName(int x){
 		
@@ -611,20 +650,17 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			String provider = lines.get(i).substring(0, lines.get(i).indexOf("*")).trim();
 			String secret = lines.get(i).substring(lines.get(i).indexOf("*") + 1).trim();
 			if (!provider.equals("")){
-//				this.providers.add(provider);
-//				this.secrets.add(secret);
 				this.providerSecrets.put(provider, secret);
 			}
 		}
-//		if (this.providers.size() == 0) {
-//			this.providers.add(" ");
-//			this.secrets.add(" ");
-//		}
 		this.rows = this.providerSecrets.size();
 	}
 
 	private void componentInit() {
 
+		this.noFocusBackgroundColor = UIManager.getColor ( "Panel.background" );
+		this.focusBackgroundColor	= Color.LIGHT_GRAY;
+		
 		FormLayout layout = new FormLayout("17px,fill:pref:grow,1dlu,40px,10px", // Cols
 				"10px,2px,14px,14px,2px,5px,17px,10px,10px"); // Rows
 
@@ -822,7 +858,6 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 				this.setVisible(true);
 				this.extraTableRows = 0;
 				this.showEditWindow();
-				System.out.println("got here");
 			}
 		} else if (evt.getSource() == minusButton) {
 			deleteRow();
@@ -852,6 +887,25 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		} catch (InterruptedException ie) {
 			System.out.println("Thread interrupted");
 		}
+	}
+	
+	/*
+	 * Focus listeners for text boxes.  These are used to activate the "minus" button
+	 * and control the removal of panels
+	 */
+	
+	public void focusGained(FocusEvent e){
+		JPanel panel = (JPanel)e.getComponent().getParent();
+		panel.setBackground(this.focusBackgroundColor);
+		this.minusButton.setEnabled(true);
+		this.selectedPanel = panel;
+	}
+	
+	public void focusLost(FocusEvent e){
+		JPanel panel = (JPanel)e.getComponent().getParent();
+		panel.setBackground(this.noFocusBackgroundColor);
+		this.minusButton.setEnabled(false);
+		this.selectedPanel = null;
 	}
 
 	/*
