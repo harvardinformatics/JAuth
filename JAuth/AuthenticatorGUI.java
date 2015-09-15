@@ -64,6 +64,9 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	//Map of the providers and secrets
 	public TreeMap<String,String> providerSecrets  = new TreeMap<String,String>();
 	
+	//The number of empty rows to display in the edit table
+	public int extraTableRows			= 0;
+	
 	public int placeInList 				= 0;
 	public int placeInBoxes 				= -1;
 
@@ -94,8 +97,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			this.saveDecrypt();
 			if (this.providerSecrets.size() == 0){
 				this.providerSecrets.put(this.defaultProvider, this.defaultSecret);
-				this.providers.add(this.defaultProvider);
-				this.secrets.add(this.defaultSecret);
+				//this.providers.add(this.defaultProvider);
+				//this.secrets.add(this.defaultSecret);
 			}
 			Map.Entry<String, String> providerSecret = this.providerSecrets.firstEntry();
 			this.currentProvider = providerSecret.getKey();			
@@ -202,36 +205,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 	}
 
 	public void tableBuilder() {
-		String gridRows = "";
-		int j = buttons.size();
-		for (int i = 0; i < j; i++) {
-			editWindow.remove(buttons.remove(0));
-		}
-//		for (int i = 0; i < rows; i++) {
-		for (int i = 0; i < this.providerSecrets.size(); i++) {
-			gridRows += "50px,";
-		}
-		gridRows += "50px,50px";
-		FormLayout fLayout = new FormLayout("10px,320px,45px", gridRows);
-		editWindow.setLayout(fLayout);
-
-		CellConstraints cc = new CellConstraints();
-//		editWindow.add(table, cc.xywh(2, 1, 1, rows + 1));
-		editWindow.add(table, cc.xywh(2, 1, 1, this.providerSecrets.size() + 1));
-
-//		for (int i = 1; i < rows; i++) {
-		for (int i = 1; i < this.providerSecrets.size(); i++) {
-			JButton xButton = new JButton("x");
-			xButton.addKeyListener(new MyKeyListener(this));
-			xButton.addMouseListener(this);
-			buttons.add(xButton);
-			editWindow.add(xButton, cc.xy(3, i + 1));
-		}
-
-		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
-		editWindow.setSize(380, 50 * (rows + 1) + 30);
+//		GridLayout editWindowLayout = new GridLayout(1,1);
+//		editWindow.setLayout(editWindowLayout);
+//		editWindow.add(this.table);
+//
+//		int rows = this.providerSecrets.size() + this.extraTableRows;
+//		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
+//		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
+//		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
+//		editWindow.setSize(380, 50 * (rows + 1) + 30);
 	}
 
 	public void showEditWindow(){
@@ -257,8 +239,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 
 		this.table.setLayout(layout);
 
-		JLabel providerLabel = new JLabel("             Providers");
-		JLabel secretLabel = new JLabel("             Secrets");
+		JLabel providerLabel = new JLabel("Providers");
+		JLabel secretLabel = new JLabel("Secrets");
 		JPanel labelpanel = new JPanel();
 		GridLayout providerSecretPanelLayout = new GridLayout(1,2);
 		labelpanel.setLayout(providerSecretPanelLayout);
@@ -305,17 +287,48 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			i++;
 		}
 		rows = temp;
+		
 		// removes duplicates from boxes array
 		while (boxes.size() > (rows - 1) * 2) {
 			boxes.remove(boxes.size() - 1);
 		}
 
-		tableBuilder();
-
-		if (boxes.size() == 0) {
-			addRow();
+		
+		//Add empty rows
+		if (i == 0 && this.extraTableRows == 0){
+			this.extraTableRows++;
 		}
+		
+		for (int j = 0; j < this.extraTableRows; j++){
+			JTextField emptyProviderField = new JTextField();
+			emptyProviderField.addKeyListener(new MyKeyListener(this));
+			emptyProviderField.getDocument().putProperty(Document.TitleProperty, "provider");
+			
+			JTextField emptySecretField = new JTextField();
+			emptySecretField.addKeyListener(new MyKeyListener(this));
+			emptySecretField.getDocument().putProperty(Document.TitleProperty, "secret");
+			
+			JPanel emptyPanel = new JPanel();
+			emptyPanel.setLayout(providerSecretPanelLayout);
+			emptyPanel.add(emptyProviderField);
+			emptyPanel.add(emptySecretField);
+			this.table.add(emptyPanel);
+		}
+		
+		
+		//Add table to the edit window
+		GridLayout editWindowLayout = new GridLayout(1,1);
+		editWindow.setLayout(editWindowLayout);
+		editWindow.add(this.table);
 
+		int rows = this.providerSecrets.size() + this.extraTableRows;
+		editWindow.setMaximumSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setMinimumSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setPreferredSize(new Dimension(380, 50 * (rows + 1) + 30));
+		editWindow.setSize(380, 50 * (rows + 1) + 30);
+
+		
+		//Setup the button panel
 		JPanel bottom = new JPanel();
 		bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -333,6 +346,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		minusButton.addKeyListener(new MyKeyListener(this));
 		addButton.addKeyListener(new MyKeyListener(this));
 
+			
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = frame.getSize().width;
 		int h = frame.getSize().height;
@@ -343,23 +357,28 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 		editWindow.setVisible(true);
 
 	}
-
+	
 	public void addRow() {
-		for (int i = 0; i < 2; i++) {
-			JTextField empty = new JTextField("");
-			empty.addKeyListener(new MyKeyListener(this));
-			table.add(empty, (rows * 2));
-			boxes.add((rows - 1) * 2, empty);
-			if (i != 0) {
-				DefaultStyledDocument doc = new DefaultStyledDocument();
-				doc.setDocumentFilter(new DocumentSizeFilter(23));
-				empty.setDocument(doc);
-			}
-		}
-		rows++;
-		tableBuilder();
-		editWindow.repaint();
+		this.extraTableRows++;
+		this.showEditWindow();
 	}
+
+//	public void addRow() {
+//		for (int i = 0; i < 2; i++) {
+//			JTextField empty = new JTextField("");
+//			empty.addKeyListener(new MyKeyListener(this));
+//			table.add(empty, (rows * 2));
+//			boxes.add((rows - 1) * 2, empty);
+//			if (i != 0) {
+//				DefaultStyledDocument doc = new DefaultStyledDocument();
+//				doc.setDocumentFilter(new DocumentSizeFilter(23));
+//				empty.setDocument(doc);
+//			}
+//		}
+//		rows++;
+//		tableBuilder();
+//		editWindow.repaint();
+//	}
 
 	/*
 	 * Remove a row from the editWindow
@@ -592,15 +611,15 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			String provider = lines.get(i).substring(0, lines.get(i).indexOf("*")).trim();
 			String secret = lines.get(i).substring(lines.get(i).indexOf("*") + 1).trim();
 			if (!provider.equals("")){
-				this.providers.add(provider);
-				this.secrets.add(secret);
+//				this.providers.add(provider);
+//				this.secrets.add(secret);
 				this.providerSecrets.put(provider, secret);
 			}
 		}
-		if (this.providers.size() == 0) {
-			this.providers.add(" ");
-			this.secrets.add(" ");
-		}
+//		if (this.providers.size() == 0) {
+//			this.providers.add(" ");
+//			this.secrets.add(" ");
+//		}
 		this.rows = this.providerSecrets.size();
 	}
 
@@ -787,6 +806,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			if (passTry.equals(this.password)) {
 				this.checkPass = true;
 				this.frame.dispose();
+				this.extraTableRows = 0;
 				this.showEditWindow();
 			}
 		} else if (evt.getSource() == addButton) {
@@ -800,6 +820,7 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 				this.password = newPassword;
 				this.firstFrame.dispose();
 				this.setVisible(true);
+				this.extraTableRows = 0;
 				this.showEditWindow();
 				System.out.println("got here");
 			}
@@ -1107,8 +1128,8 @@ public final class AuthenticatorGUI extends JPanel implements ActionListener, Mo
 			this.password = "";
 			
 			this.providerSecrets.put("RCFAS", "DUMMY-SECRET");
-			this.providers.add("RCFAS");
-			this.secrets.add("DUMMY-SECRET");
+//			this.providers.add("RCFAS");
+//			this.secrets.add("DUMMY-SECRET");
 			saveEncrypt();
 		}
 	}

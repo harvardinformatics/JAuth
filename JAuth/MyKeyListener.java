@@ -37,11 +37,6 @@ public class MyKeyListener implements KeyListener {
 						((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 			}
-			if (pressed.contains('c') && pressed.contains('￿')) {
-				StringSelection ss = new StringSelection(
-						((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
-				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
-			}
 			if (pressed.contains('v') && pressed.contains('￿')) {
 				try {
 					((JTextComponent) aGui.editWindow.getFocusOwner()).setText(
@@ -57,6 +52,7 @@ public class MyKeyListener implements KeyListener {
 					aGui.password = aGui.newPass.getText();
 					aGui.firstFrame.dispose();
 					aGui.setVisible(true);
+					aGui.extraTableRows = 0;
 					aGui.showEditWindow();
 				}
 			} else if (aGui.editWindow.isVisible()) {
@@ -67,6 +63,7 @@ public class MyKeyListener implements KeyListener {
 				if (passTry.equals(aGui.password)) {
 					aGui.checkPass = true;
 					aGui.frame.dispose();
+					aGui.extraTableRows = 0;
 					aGui.showEditWindow();
 				}
 			}
