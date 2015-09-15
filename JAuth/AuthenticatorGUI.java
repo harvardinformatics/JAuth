@@ -65,7 +65,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	public ArrayList<String> providers 	= new ArrayList<String>(0);
 	
 	//Map of the providers and secrets
-	public TreeMap<String,String> providerSecrets  = new TreeMap<String,String>();
+	public Map<String,String> providerSecrets  = new LinkedHashMap<String,String>();
 	
 	//The number of empty rows to display in the edit table
 	public int extraTableRows			= 0;
@@ -103,12 +103,9 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			this.saveDecrypt();
 			if (this.providerSecrets.size() == 0){
 				this.providerSecrets.put(this.defaultProvider, this.defaultSecret);
-				//this.providers.add(this.defaultProvider);
-				//this.secrets.add(this.defaultSecret);
 			}
-			Map.Entry<String, String> providerSecret = this.providerSecrets.firstEntry();
-			this.currentProvider = providerSecret.getKey();			
-			//setSecret(this.providerSecrets.get(this.currentProvider));
+			
+			this.currentProvider = this.providerSecrets.keySet().toArray(new String[this.providerSecrets.size()])[0];	
 			
 			this.setSecret(this.providerSecrets.get(this.currentProvider));
 			if (this.password == "") {
@@ -121,14 +118,6 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			e.printStackTrace();
 		}
 
-//		if (!this.providerSecrets.get(this.currentProvider).equals(this.defaultSecret)) {
-//			this.nameButton.setText("  " + this.currentProvider);
-//		}
-//		else {
-//			this.nameButton.setText("  Edit Secrets");
-//			this.codeField.setText("--- ---");
-//			this.setSecret("");			
-//		}
 		
 		if (!this.providerSecrets.get(this.currentProvider).equals("DUMMY-SECRET")) {
 			this.setSecret(this.providerSecrets.get(this.currentProvider));
@@ -209,6 +198,33 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		this.firstFrame.setVisible(true);
 		this.firstFrame.requestFocus();
 	}
+	
+	/**
+	 * Return the default layout for edit window panels
+	 * 
+	 * @return
+	 */
+	public GridBagLayout getEditPanelLayout(){
+		GridBagLayout layout = new GridBagLayout();
+		layout.columnWidths = new int[] {150, 150};
+		layout.rowHeights = new int[] {40};
+		layout.columnWeights = new double[]{0.5, 0.5};
+		return layout;
+	}
+	
+	/**
+	 * Return the default constraints for edit panel components
+	 * @return
+	 */
+	public GridBagConstraints getEditPanelComponentConstraints(){
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 2, 2, 2);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.BOTH;
+		return gbc;
+	}
 
 	/*
 	 * Sets the edit window size based on the number of 
@@ -225,11 +241,12 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	 */
 	public void showEditWindow() {
 
-		rows = this.providerSecrets.size() + 1;
+		//rows = this.providerSecrets.size() + 1;
 		//this.rows = this.providerSecrets.size() + 1;
 		GridLayout layout = new GridLayout(0, 1);
 
 		this.table.removeAll();
+		this.providerSecretPanels = new ArrayList<JPanel>(0);
 		editWindow.getContentPane().removeAll(); // reset window
 		saveButton.removeMouseListener(this);
 		addButton.removeMouseListener(this);
@@ -240,16 +257,25 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			minusButton.removeKeyListener(minusButton.getKeyListeners()[0]);
 			addButton.removeKeyListener(addButton.getKeyListeners()[0]);
 		}
-
+		
 		this.table.setLayout(layout);
 
+
+		//Set the column header labels
 		JLabel providerLabel = new JLabel("Providers");
 		JLabel secretLabel = new JLabel("Secrets");
 		JPanel labelpanel = new JPanel();
-		GridLayout providerSecretPanelLayout = new GridLayout(1,2);
+		GridBagLayout providerSecretPanelLayout = this.getEditPanelLayout();
 		labelpanel.setLayout(providerSecretPanelLayout);
-		labelpanel.add(providerLabel);
-		labelpanel.add(secretLabel);
+		
+		GridBagConstraints providerLabelConstraints = this.getEditPanelComponentConstraints();
+		providerLabelConstraints.insets = new Insets(0,5,0,3);
+		labelpanel.add(providerLabel,providerLabelConstraints);
+		
+		GridBagConstraints secretLabelConstraints = this.getEditPanelComponentConstraints();
+		secretLabelConstraints.gridx = 1;
+		secretLabelConstraints.insets = new Insets(0,5,0,3);
+		labelpanel.add(secretLabel,secretLabelConstraints);
 		this.table.add(labelpanel);
 		
 		int temp = rows;
@@ -283,8 +309,13 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 				
 				JPanel providerSecretPanel = new JPanel();
 				providerSecretPanel.setLayout(providerSecretPanelLayout);
-				providerSecretPanel.add(providerField);
-				providerSecretPanel.add(secretField);
+				
+				GridBagConstraints providerFieldConstraints = this.getEditPanelComponentConstraints();
+				providerSecretPanel.add(providerField,providerFieldConstraints);
+				
+				GridBagConstraints secretFieldConstraints = this.getEditPanelComponentConstraints();
+				secretFieldConstraints.gridx = 1;
+				providerSecretPanel.add(secretField,secretFieldConstraints);
 				this.table.add(providerSecretPanel);
 				this.providerSecretPanels.add(providerSecretPanel);
 				
@@ -319,9 +350,15 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			
 			JPanel emptyPanel = new JPanel();
 			emptyPanel.setLayout(providerSecretPanelLayout);
-			emptyPanel.add(emptyProviderField);
-			emptyPanel.add(emptySecretField);
+			
+			GridBagConstraints emptyProviderFieldConstraints = this.getEditPanelComponentConstraints();
+			emptyPanel.add(emptyProviderField, emptyProviderFieldConstraints);
+			
+			GridBagConstraints emptySecretFieldConstraints = this.getEditPanelComponentConstraints();
+			emptySecretFieldConstraints.gridx = 1;
+			emptyPanel.add(emptySecretField,emptySecretFieldConstraints);
 			this.table.add(emptyPanel);
+			this.providerSecretPanels.add(emptyPanel);
 		}
 		
 		
@@ -364,7 +401,11 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		int x = (dim.width - w) / 2;
 		int y = (dim.height - h) / 2;
 
-		editWindow.setLocation(x, y);
+		//If the location hasn't been set yet (ie, you're just starting up)
+		//set to the middle.  Otherwise, leave it alone
+		if (this.editWindow.getLocation().x == 0){
+			editWindow.setLocation(x, y);
+		}
 		editWindow.setVisible(true);
 
 	}
@@ -378,7 +419,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		this.showEditWindow();
 	}
 
-	/*
+	/**
 	 * Remove the selected panel, and, if it has a provider / secret
 	 * remove those from the list
 	 */
@@ -403,8 +444,14 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 				if (textField.getDocument().getProperty(Document.TitleProperty).equals("provider")){
 					String provider = textField.getText().trim();
 					if (!provider.equals("") && this.providerSecrets.containsKey(provider)){
-						this.providerSecrets.remove(provider);
+						
+						//If it's the current provider, going to have to update
+						if (provider.equals(this.currentProvider)){
+							this.updateName(1);
+						}
+						this.providerSecrets.remove(provider,this.providerSecrets.get(provider));
 						isEmpty = false;
+						
 					}
 				}
 			}
@@ -415,38 +462,11 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		}
 		
 		this.table.remove(this.selectedPanel);
+		this.providerSecretPanels.remove(this.selectedPanel);
 		this.resizeEditWindow(this.extraTableRows + this.providerSecrets.size());
 		this.editWindow.repaint();
 		this.selectedPanel = null;
 	}
-	/*
-	 * Remove a row from the editWindow
-	 */
-//	public void deleteRow() {
-//		if (rows != 1) {
-//			if (placeInBoxes != -1) {
-//				table.remove(placeInBoxes + 2);
-//				boxes.remove(placeInBoxes);
-//				boxes.remove(placeInBoxes);
-//				table.remove(placeInBoxes + 2);
-//				rows--;
-//				saveButton.requestFocus();
-//			} else {
-//				table.remove(boxes.remove(boxes.size() - 1));
-//				table.remove(boxes.remove(boxes.size() - 1));
-//				rows--;
-//			}
-//		}
-//		while (providers.size() > rows - 1 && secrets.size() > rows - 1) {
-//			providers.remove(providers.size() - 1);
-//			secrets.remove(secrets.size() - 1);
-//		}
-//		table.repaint();
-//		if (placeInList > providers.size()) {
-//			placeInList = 0;
-//		}
-//		placeInBoxes = -1;
-//	}
 
 	/*
 	 * Iterates through the components in the providerSecretPanels and 
@@ -476,43 +496,6 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		saveEncrypt();
 	}
 	
-//	public void save() {
-//		for (int i = 0; i < (rows - 1) * 2; i++) {
-//			if (i % 2 != 1 || i == 0) {
-//				if (providers.size() <= i / 2) {
-//					if (boxes.get(i).getText().equals("")) {
-//						providers.add("");
-//					} else {
-//						providers.add(boxes.get(i).getText());
-//					}
-//				} else {
-//					if (boxes.size() != 0 && boxes.get(i).getText() == (null)) {
-//						providers.set(i / 2, "");
-//					} else if (boxes.size() != 0) {
-//						providers.set(i / 2, boxes.get(i).getText());
-//					}
-//				}
-//			}
-//			if (secrets.size() <= i / 2) {
-//				secrets.add(boxes.get(i).getText());
-//			} else if (boxes.size() > 0) {
-//				secrets.set(i / 2, boxes.get(i).getText());
-//			}
-//		}
-//		for (int i = 0; i < rows - 1; i++) {
-//			if (providers.get(i).trim().equals("")) {
-//				providers.remove(i);
-//				secrets.remove(i);
-//				if (boxes.size() > 0) {
-//					boxes.remove(i * 2);
-//					boxes.remove(i * 2);
-//				}
-//				rows--;
-//			}
-//		}
-//		updateName(0);
-//		saveEncrypt();
-//	}
 
 	/*
 	 * Increments the provider to the next one in the list and 
@@ -524,14 +507,20 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		//Get the next provider from the set and set it to currentProvider
 		if (x == 1){
 			boolean nextprovider = false;
-			for (Map.Entry<String, String> entry : this.providerSecrets.entrySet())
-			{
+			String[] providers = this.providerSecrets.keySet().toArray(new String[this.providerSecrets.size()]);
+			for (int i = 0; i < providers.length; i++){
 				if (nextprovider){
-					this.currentProvider = entry.getKey();
+					this.currentProvider = providers[i];
 					nextprovider = false;
 				} else {
-					if (entry.getValue().equals(this.currentProvider)){
+					if (providers[i].equals(this.currentProvider)){
 						nextprovider = true;
+						
+						//If this is the last one in the iteration, then
+						//set to the first element of the list
+						if (i == providers.length - 1){
+							this.currentProvider = providers[0];
+						}
 					}
 				}
 			}
@@ -551,35 +540,6 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		}
 	}
 	
-	// updates nameButton and codeFeild
-//	public void updateName(int x) {
-//		if (placeInList < secrets.size() - 1) {
-//			placeInList += x;
-//		} else {
-//			if (x == 1) {
-//				placeInList = 0;
-//			}
-//		}
-//		if (!secrets.get(placeInList).equals("DUMMY-SECRET")) {
-//			if (providers.size() == 0 || providers.get(placeInList).trim().equals("")) {
-//				nameButton.setText("  Add Secrets");
-//			} else {
-//				nameButton.setText("  " + providers.get(placeInList)); // update
-//																		// provider
-//			}
-//			if (secrets.size() == 0 || secrets.get(placeInList).trim().equals("")) {
-//				this.setSecret("");
-//				codeField.setText("--- ---");
-//			} else {
-//				this.setSecret(secrets.get(placeInList)); // update secret
-//															// respectively
-//			}
-//		} else {
-//			nameButton.setText("  Edit Secrets");
-//			codeField.setText("--- ---");
-//			this.setSecret("");
-//		}
-//	}
 
 	// opens a window to enter password
 	public void editPasswordCheck() {
@@ -1089,9 +1049,9 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		//String toReturn = "" + this.rows + "+" + this.password + "+";
 		String toReturn = "" + this.providerSecrets.size() + "+" + this.password + "+";
 		
-		for (Map.Entry<String, String> entry : this.providerSecrets.entrySet())
+		for (String provider : this.providerSecrets.keySet().toArray(new String[this.providerSecrets.size()]))
 		{
-			toReturn += entry.getKey() + "*" + entry.getValue() + "+";
+			toReturn += provider + "*" + this.providerSecrets.get(provider) + "+";
 		}
 		System.out.println(toReturn);
 		return toReturn;

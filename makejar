@@ -1,6 +1,6 @@
 . setpath
 
-javac JAuth/AuthenticatorGUI.java
+javac -g JAuth/AuthenticatorGUI.java
 
 jar xf jars/forms-1.1.0.jar
 
