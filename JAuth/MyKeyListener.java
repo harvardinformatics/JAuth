@@ -31,21 +31,6 @@ public class MyKeyListener implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		pressed.add(e.getKeyChar());
-//		if (aGui.editWindow.isVisible()) {
-//			if (pressed.contains('c') && pressed.contains('￿')) {
-//				StringSelection ss = new StringSelection(
-//						((JTextComponent) aGui.editWindow.getFocusOwner()).getSelectedText());
-//				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
-//			}
-//			if (pressed.contains('v') && pressed.contains('￿')) {
-//				try {
-//					((JTextComponent) aGui.editWindow.getFocusOwner()).setText(
-//							(String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-//			}
-//		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (aGui.firstFrame.isVisible()) {
 				if (!aGui.newPass.getText().equals("") && !aGui.newPass.getText().equals(" ")) {
@@ -59,7 +44,7 @@ public class MyKeyListener implements KeyListener {
 				aGui.save();
 				aGui.editWindow.dispose();
 			} else if (aGui.frame.isVisible()) {
-				String passTry = aGui.pass.getText();
+				String passTry = new String(aGui.pass.getPassword());
 				if (passTry.equals(aGui.password)) {
 					aGui.checkPass = true;
 					aGui.frame.dispose();

@@ -44,9 +44,14 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	public JFrame firstFrame = new JFrame();
 	public ArrayList<JTextField> boxes 				= new ArrayList<JTextField>(0);
 	public ArrayList<JButton> buttons 				= new ArrayList<JButton>(0);
+	
+	//List of provider secret panels; used for removing and saving 
 	public ArrayList<JPanel> providerSecretPanels	= new ArrayList<JPanel>(0);	
 	public JLabel nextButton = new JLabel(">");
 	public JFrame editWindow = new JFrame();
+	
+	//Bottom panel of buttons in the edit window
+	public JPanel buttonPanel;
 	
 	public Color noFocusBackgroundColor;
 	public Color focusBackgroundColor;
@@ -326,39 +331,10 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		}
 		rows = temp;
 		
-		// removes duplicates from boxes array
-		while (boxes.size() > (rows - 1) * 2) {
-			boxes.remove(boxes.size() - 1);
-		}
-
 		
 		//Add empty rows
 		if (i == 0 && this.extraTableRows == 0){
 			this.extraTableRows++;
-		}
-		
-		for (int j = 0; j < this.extraTableRows; j++){
-			JTextField emptyProviderField = new JTextField();
-			emptyProviderField.addKeyListener(new MyKeyListener(this));
-			emptyProviderField.addFocusListener(this);
-			emptyProviderField.getDocument().putProperty(Document.TitleProperty, "provider");
-			
-			JTextField emptySecretField = new JTextField();
-			emptySecretField.addKeyListener(new MyKeyListener(this));
-			emptySecretField.addFocusListener(this);
-			emptySecretField.getDocument().putProperty(Document.TitleProperty, "secret");
-			
-			JPanel emptyPanel = new JPanel();
-			emptyPanel.setLayout(providerSecretPanelLayout);
-			
-			GridBagConstraints emptyProviderFieldConstraints = this.getEditPanelComponentConstraints();
-			emptyPanel.add(emptyProviderField, emptyProviderFieldConstraints);
-			
-			GridBagConstraints emptySecretFieldConstraints = this.getEditPanelComponentConstraints();
-			emptySecretFieldConstraints.gridx = 1;
-			emptyPanel.add(emptySecretField,emptySecretFieldConstraints);
-			this.table.add(emptyPanel);
-			this.providerSecretPanels.add(emptyPanel);
 		}
 		
 		
@@ -367,27 +343,12 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		editWindow.setLayout(editWindowLayout);
 		editWindow.add(this.table);
 
+		//Setup the button panel at the bottom
+		this.addButtonPanel();
+		
 		int rows = this.providerSecrets.size() + this.extraTableRows;
 		this.resizeEditWindow(rows);
 
-		
-		//Setup the button panel
-		JPanel bottom = new JPanel();
-		bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-		bottom.add(addButton);
-		addButton.addMouseListener(this);
-		bottom.add(minusButton);
-		minusButton.addMouseListener(this);
-		bottom.add(saveButton);
-		table.add(bottom);
-		saveButton.addMouseListener(this);
-		table.getRootPane().setDefaultButton(saveButton);
-
-		saveButton.addKeyListener(new MyKeyListener(this));
-		table.addKeyListener(new MyKeyListener(this));
-		minusButton.addKeyListener(new MyKeyListener(this));
-		addButton.addKeyListener(new MyKeyListener(this));
 		
 		//Prevent the removal of all boxes
 		if (this.extraTableRows + this.providerSecrets.size() < 2){
@@ -411,12 +372,70 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	}
 	
 	/**
-	 * Increments the extraTableRows value and 
-	 * calls showEditWindow
+	 * Sets up the lower button panel on the editWindow table
+	 */
+	public void addButtonPanel(){
+		//Setup the button panel
+		this.buttonPanel = new JPanel();
+		this.buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+		this.buttonPanel.add(this.addButton);
+		this.addButton.addMouseListener(this);
+		this.buttonPanel.add(this.minusButton);
+		this.minusButton.addMouseListener(this);
+		this.buttonPanel.add(this.saveButton);
+		this.saveButton.addKeyListener(new MyKeyListener(this));
+		this.table.addKeyListener(new MyKeyListener(this));
+		this.minusButton.addKeyListener(new MyKeyListener(this));
+		this.addButton.addKeyListener(new MyKeyListener(this));				
+		this.saveButton.addMouseListener(this);
+		
+		this.table.add(this.buttonPanel);
+		this.table.getRootPane().setDefaultButton(this.saveButton);
+
+	}
+	
+	/**
+	 * Increments the extraTableRows value, 
+	 * removes the button panel, adds the row, and replaces the button panel
 	 */
 	public void addRow() {
 		this.extraTableRows++;
-		this.showEditWindow();
+		
+		//Remove the button panel
+		this.table.remove(this.buttonPanel);
+		
+		//Create the empty fields
+		JTextField emptyProviderField = new JTextField();
+		emptyProviderField.addKeyListener(new MyKeyListener(this));
+		emptyProviderField.addFocusListener(this);
+		emptyProviderField.getDocument().putProperty(Document.TitleProperty, "provider");
+		
+		JTextField emptySecretField = new JTextField();
+		emptySecretField.addKeyListener(new MyKeyListener(this));
+		emptySecretField.addFocusListener(this);
+		emptySecretField.getDocument().putProperty(Document.TitleProperty, "secret");
+		
+		JPanel emptyPanel = new JPanel();
+		emptyPanel.setLayout(this.getEditPanelLayout());
+		
+		GridBagConstraints emptyProviderFieldConstraints = this.getEditPanelComponentConstraints();
+		emptyPanel.add(emptyProviderField, emptyProviderFieldConstraints);
+		
+		GridBagConstraints emptySecretFieldConstraints = this.getEditPanelComponentConstraints();
+		emptySecretFieldConstraints.gridx = 1;
+		emptyPanel.add(emptySecretField,emptySecretFieldConstraints);
+		this.table.add(emptyPanel);
+		this.providerSecretPanels.add(emptyPanel);
+
+		//Setup the button panel at the bottom
+		this.table.add(this.buttonPanel);
+		
+		//Resize and display the edit window
+		int rows = this.providerSecrets.size() + this.extraTableRows;
+		this.resizeEditWindow(rows);
+		this.editWindow.repaint();
+
 	}
 
 	/**
@@ -540,9 +559,60 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		}
 	}
 	
+	public void editPasswordCheck(){
+		if (!this.editWindow.isVisible() && !this.frame.isVisible()) {
+			this.frame.getContentPane().removeAll();
+			this.pass.setText("");
+			JLabel title = new JLabel("Enter PIN");
+			title.setHorizontalTextPosition(SwingConstants.CENTER);
+			
+//			enterButton.addMouseListener(this);
+			this.frame.setLayout(new FormLayout("10px,fill:pref:grow,5px,48px,10px", "fill:pref:grow,fill:pref:grow,10px"));
+			CellConstraints cc = new CellConstraints();
+			this.frame.add(title, cc.xy(2, 1));
+			this.frame.add(this.pass, cc.xy(2, 2));
+
+			ImageIcon icon;
+			JLabel logo = new JLabel();
+			try {
+				icon = new ImageIcon(getClass().getResource("logo/logo48.png"));
+				logo.setIcon(icon);
+				this.frame.add(logo, cc.xywh(4, 1, 1, 3));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			int w = this.frame.getSize().width;
+			int h = this.frame.getSize().height;
+			int x = ((dim.width - w) / 2 - 70);
+			int y = ((dim.height - h) / 2 - 20);
+			this.frame.setLocation(x, y);
+
+			this.frame.setSize(205, 80);
+			this.frame.setMaximumSize(new Dimension(205, 80));
+			this.frame.setMinimumSize(new Dimension(205, 80));
+			this.frame.setAlwaysOnTop(true);
+
+			if (this.frame.getKeyListeners().length > 0) {
+				this.frame.removeKeyListener(this.frame.getKeyListeners()[0]);
+				this.pass.removeKeyListener(this.pass.getKeyListeners()[0]);
+				if (this.pass.getKeyListeners().length > 0) {
+					this.pass.removeKeyListener(this.pass.getKeyListeners()[0]);
+				}
+			}
+
+			this.frame.addKeyListener(new MyKeyListener(this));
+			this.pass.addKeyListener(new MyKeyListener(this));
+
+			this.frame.setLocation(x, y);
+			this.frame.setVisible(true);
+			this.pass.requestFocus();
+		}
+	}
 
 	// opens a window to enter password
-	public void editPasswordCheck() {
+	public void editPasswordCheck2() {
 
 		if (!editWindow.isVisible() && !frame.isVisible()) {
 			frame.getContentPane().removeAll();
@@ -1053,7 +1123,6 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		{
 			toReturn += provider + "*" + this.providerSecrets.get(provider) + "+";
 		}
-		System.out.println(toReturn);
 		return toReturn;
 	}
 
