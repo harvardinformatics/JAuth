@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="">
-  <entry targetMediaFileId="23" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_windows_2_0.exe" newVersion="2.0" newMediaFileId="23" fileSize="2315264" bundledJre="" archive="false">
+  <entry targetMediaFileId="23" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_windows-x64_2_0.exe" newVersion="2.0" newMediaFileId="23" fileSize="2387968" bundledJre="" archive="false">
+    <comment language="en" />
+  </entry>
+  <entry targetMediaFileId="25" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_unix_2_0.sh" newVersion="2.0" newMediaFileId="25" fileSize="1538323" bundledJre="" archive="false">
+    <comment language="en" />
+  </entry>
+  <entry targetMediaFileId="76" updatableVersionMin="" updatableVersionMax="" fileName="JAuth_macos_2_0.dmg" newVersion="2.0" newMediaFileId="76" fileSize="2179207" bundledJre="" archive="false">
     <comment language="en" />
   </entry>
 </updateDescriptor>
