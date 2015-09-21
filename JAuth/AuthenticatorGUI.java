@@ -93,7 +93,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	public Color darkred 				= new Color(150, 0, 0);
 	
 	//Some defaults
-	public String defaultProvider 		= new String("RCFAS");
+	public String defaultProvider 		= new String("FASRC");
 	public String defaultSecret			= new String("DUMMY-SECRET");
 	
 	//Replaces placeInList
@@ -1210,7 +1210,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			this.rows = 2;
 			this.password = "";
 			
-			this.providerSecrets.put("RCFAS", "DUMMY-SECRET");
+			this.providerSecrets.put(this.defaultProvider, this.defaultSecret);
 //			this.providers.add("RCFAS");
 //			this.secrets.add("DUMMY-SECRET");
 			saveEncrypt();
