@@ -1,0 +1,7 @@
+*.class
+.DS_Store
+Installers/output.txt
+JAuth_KS
+.externalToolBuilders/
+.project
+*.psd
