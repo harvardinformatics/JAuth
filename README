@@ -14,9 +14,10 @@ Explanatory bloggage at http://blog.jcuff.net/2011/09/beautiful-two-factor-deskt
 Installation using GUI Installer
 --------------------------------
 
-OS X       https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_macos_1_0.dmg
-Windows    https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_windows_1_0.dmg
-Linux      https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_unix_1_0.dmg
+OS X       https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_macos_2_0.dmg
+Windows    https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_windows_2_0.exe
+Windows64  https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_windows-x64_2_0.exe
+Linux      https://github.com/mclamp/JAuth/tree/master/Installers/JAuth_unix_2_0.sh
 
 All installers available from https://github.com/mclamp/JAuth/tree/master/Installers
 
