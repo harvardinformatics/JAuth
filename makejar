@@ -1,4 +1,4 @@
-. setpath
+. ./setpath
 
 javac -g JAuth/AuthenticatorGUI.java
 
