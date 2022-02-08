@@ -25,6 +25,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class AuthenticatorGUI extends JPanel implements FocusListener, ActionListener, MouseListener, MouseMotionListener {
 
+	// Resize window using multiplier.
+	// 1=original size, 2=LCD window is two times bigger. 3=3times bigger, etc
+	private static int ResizeMultiplier = 3;
+
 	public JLabel codeField = new JLabel("--- ---");
 	public JLabel copyLabel = new JLabel(" Copy");
 	public JLabel nextLabel = new JLabel(" next");
@@ -47,7 +51,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 	
 	//List of provider secret panels; used for removing and saving 
 	public ArrayList<JPanel> providerSecretPanels	= new ArrayList<JPanel>(0);	
-	public JLabel nextButton = new JLabel(">");
+	public JLabel nextButton = new JLabel(">>>");
 	public JFrame editWindow = new JFrame();
 	
 	//Bottom panel of buttons in the edit window
@@ -691,8 +695,22 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 		this.noFocusBackgroundColor = UIManager.getColor ( "Panel.background" );
 		this.focusBackgroundColor	= Color.LIGHT_GRAY;
 		
-		FormLayout layout = new FormLayout("17px,fill:pref:grow,1dlu,40px,10px", // Cols
-				"10px,2px,14px,14px,2px,5px,17px,10px,10px"); // Rows
+		//BEFORE-RESIZE: FormLayout layout = new FormLayout("17px,fill:pref:grow,1dlu,40px,10px", // Cols
+		//		"10px,2px,14px,14px,2px,5px,17px,10px,10px"); // Rows
+
+		FormLayout layout = new FormLayout(
+			String.valueOf(17*ResizeMultiplier)+"px,fill:pref:grow,1dlu,"+
+			String.valueOf(40*ResizeMultiplier)+"px,"+
+			String.valueOf(10*ResizeMultiplier)+"px", // Cols
+			String.valueOf(10*ResizeMultiplier)+"px,"+
+			String.valueOf(2*ResizeMultiplier)+"px,"+
+			String.valueOf(14*ResizeMultiplier)+"px,"+
+			String.valueOf(14*ResizeMultiplier)+"px,"+
+			String.valueOf(2*ResizeMultiplier)+"px,"+
+			String.valueOf(5*ResizeMultiplier)+"px,"+
+			String.valueOf(17*ResizeMultiplier)+"px,"+
+			String.valueOf(10*ResizeMultiplier)+"px,"+
+			String.valueOf(10*ResizeMultiplier)+"px"); // Rows
 
 		setLayout(layout);
 		setBackground(Color.white);
@@ -703,11 +721,11 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 
 			// Load the LCD font
 
-			Font font32 = this.font.deriveFont(32f);
-			Font font20 = this.font.deriveFont(20f);
-			Font font13 = this.font.deriveFont(13f);
-			Font font12 = new Font("Monospace", Font.BOLD, 8);
-			Font font11 = new Font("Monospace", Font.BOLD, 8);
+			Font font32 = this.font.deriveFont((float)(32*ResizeMultiplier));
+			Font font20 = this.font.deriveFont((float)(20*ResizeMultiplier));
+			Font font13 = this.font.deriveFont((float)(13*ResizeMultiplier));
+			Font font12 = new Font("Monospace", Font.BOLD, 8*ResizeMultiplier);
+			Font font11 = new Font("Monospace", Font.BOLD, 8*ResizeMultiplier);
 
 			codeField.setFont(font32);
 			copyLabel.setFont(font13);
@@ -738,11 +756,11 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			e.printStackTrace();
 		}
 
-		codeField.setPreferredSize(new Dimension(100, 30));
-		copyLabel.setPreferredSize(new Dimension(60, 30));
-		nextLabel.setPreferredSize(new Dimension(60, 30));
-		editButton.setPreferredSize(new Dimension(10, 10));
-		nameButton.setPreferredSize(new Dimension(10, 10));
+		codeField.setPreferredSize(new Dimension(100*ResizeMultiplier, 30*ResizeMultiplier));
+		copyLabel.setPreferredSize(new Dimension(60*ResizeMultiplier, 30*ResizeMultiplier));
+		nextLabel.setPreferredSize(new Dimension(60*ResizeMultiplier, 30*ResizeMultiplier));
+		editButton.setPreferredSize(new Dimension(10*ResizeMultiplier, 10*ResizeMultiplier));
+		nameButton.setPreferredSize(new Dimension(10*ResizeMultiplier, 10*ResizeMultiplier));
 		copyLabel.addMouseListener(this);
 		nextLabel.addMouseListener(this);
 		editButton.addMouseListener(this);
@@ -750,7 +768,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 
 		nameButton.setAlignmentX(LEFT_ALIGNMENT);
 
-		closeLabel.setPreferredSize(new Dimension(10, 10));
+		closeLabel.setPreferredSize(new Dimension(10*ResizeMultiplier, 10*ResizeMultiplier));
 		closeLabel.addMouseListener(this);
 		// Show textfield with number
 		add(codeField, cc.xywh(2, 3, 1, 2)); // 2nd col 3rd row
@@ -1278,7 +1296,7 @@ public final class AuthenticatorGUI extends JPanel implements FocusListener, Act
 			jf.setDefaultCloseOperation(2);
 			jf.pack();
 
-			jf.setSize(175, 60);
+			jf.setSize(175*ResizeMultiplier, 60*ResizeMultiplier);
 			jf.setLocation(dim.width - jf.getSize().width - 50, 30);
 
 			jf.setVisible(true);
